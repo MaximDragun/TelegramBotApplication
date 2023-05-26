@@ -17,7 +17,8 @@
 	<modules>
 		<module>dispatcher</module>
 		<module>rabbitMQ-support</module>
-	</modules>
+        <module>node</module>
+    </modules>
 
 	<properties>
 		<java.version>17</java.version>

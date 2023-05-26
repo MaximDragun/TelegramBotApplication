@@ -13,7 +13,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Slf4j
 @Component
-//@Lazy
 public class TelegramBot extends TelegramLongPollingBot {
     @Value("${bot.name}")
     private String userName;

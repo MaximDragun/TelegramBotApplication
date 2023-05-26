@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.service.UpdateProducer;
 import org.example.utils.MessageUtils;
@@ -15,15 +16,14 @@ import static org.example.model.RabbitQueue.*;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class TelegramBotController {
 
     @Autowired
     @Lazy
     private TelegramBot telegramBot;
-    @Autowired
-    private MessageUtils messageUtils;
-    @Autowired
-    private UpdateProducer updateProducer;
+    private final MessageUtils messageUtils;
+    private final UpdateProducer updateProducer;
 
     public void processUpdate(Update update) {
         if (update == null) {
@@ -55,30 +55,30 @@ public class TelegramBotController {
                 "Тип сообщения не поддерживается");
         setView(sendMessage);
     }
+
     private void SetFileIsReceivedView(Update update) {
         SendMessage sendMessage = messageUtils.generateSendMessage(update,
                 "Файл получен! Идет обработка");
         setView(sendMessage);
     }
 
-    private void setView(SendMessage sendMessage) {
+    public void setView(SendMessage sendMessage) {
         telegramBot.sendAnswerMessage(sendMessage);
     }
 
     private void processDocumentMessage(Update update) {
-        updateProducer.produce(DOC_MESSAGE_UPDATE,update);
+        updateProducer.produce(DOC_MESSAGE_UPDATE, update);
         SetFileIsReceivedView(update);
         log.info("Документ получен");
     }
 
 
-
     private void processTextMessage(Update update) {
-        updateProducer.produce(TEXT_MESSAGE_UPDATE,update);
+        updateProducer.produce(TEXT_MESSAGE_UPDATE, update);
     }
 
     private void processPhotoMessage(Update update) {
-        updateProducer.produce(PHOTO_MESSAGE_UPDATE,update);
+        updateProducer.produce(PHOTO_MESSAGE_UPDATE, update);
         SetFileIsReceivedView(update);
     }
 }
