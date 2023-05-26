@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import static org.example.model.RabbitQueue.ANSWER_MESSAGE;
-@RequiredArgsConstructor
+
 @Service
+@RequiredArgsConstructor
 public class AnswerConsumerImpl implements AnswerConsumer {
 
     private final TelegramBotController telegramBotController;
