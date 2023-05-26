@@ -21,19 +21,15 @@ import static org.example.model.RabbitQueue.*;
 @RequiredArgsConstructor
 public class ConsumerServiceImpl implements ConsumerService {
 
-    private final ProducerService producerService;
+    private final MainService mainService;
 
     @Override
     @RabbitListener(queues = TEXT_MESSAGE_UPDATE)
     public void consumeTextMessageUpdate(Update update) {
-        ThreadLocalRandom tr = ThreadLocalRandom.current();
-        log.info("Выполняется консьюмер текста");
-        Message message = update.getMessage();
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(message.getChatId());
-        sendMessage.setText("Сегодня: "+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEEE, d MMM yyyy HH:mm", Locale.of("RU")))+"\n" +
-                "За окном температура тепла: " + tr.nextInt(0,10)+" градусов");
-        producerService.produceAnswer(sendMessage);
+
+        log.info("Execute consumer text");
+        mainService.processTextMessage(update);
+
     }
 
     @RabbitListener(queues = PHOTO_MESSAGE_UPDATE)
