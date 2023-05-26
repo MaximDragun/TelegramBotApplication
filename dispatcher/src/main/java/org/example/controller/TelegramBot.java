@@ -27,6 +27,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
         telegramBotController.processUpdate(update);
+
     }
 
     public void sendAnswerMessage(SendMessage sendMessage) {
