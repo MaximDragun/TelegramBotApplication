@@ -5,17 +5,23 @@ public enum BotCommands {
     REGISTRATION("/registration"),
     CANCEL("/cancel"),
     START("/start");
-    private final String cmd;
+    private final String value;
 
-    BotCommands(String cmd) {
-        this.cmd = cmd;
+    BotCommands(String value) {
+        this.value = value;
     }
 
     @Override
     public String toString() {
-        return cmd;
+        return value;
     }
-    public boolean equals(String cmd){
-        return this.toString().equals(cmd);
+
+    public static BotCommands fromValue(String v) {
+        for (BotCommands c: BotCommands.values()) {
+            if (c.value.equals(v)) {
+                return c;
+            }
+        }
+        return null;
     }
 }

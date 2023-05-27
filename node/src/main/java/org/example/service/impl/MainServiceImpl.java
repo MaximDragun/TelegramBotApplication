@@ -1,11 +1,16 @@
-package org.example.service;
+package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.exceptions.UploadFileException;
+import org.example.model.ApplicationDocument;
 import org.example.model.ApplicationUser;
 import org.example.model.MessageEntity;
 import org.example.model.enums.UserState;
 import org.example.repositories.MessageRepository;
+import org.example.service.FileService;
+import org.example.service.MainService;
+import org.example.service.ProducerService;
 import org.example.service.enums.BotCommands;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -32,6 +37,7 @@ public class MainServiceImpl implements MainService {
     private final MessageRepository messageRepository;
     private final ProducerService producerService;
     private final ApplicationUserRepository applicationUserRepository;
+    private final FileService fileService;
 
     @Override
     public void processTextMessage(Update update) {
@@ -43,8 +49,8 @@ public class MainServiceImpl implements MainService {
         String text = update.getMessage().getText();
         String output = "";
 
-
-        if (CANCEL.equals(text))
+        BotCommands serviceCommand = BotCommands.fromValue(text);
+        if (CANCEL.equals(serviceCommand))
             output = cancelProcess(applicationUser);
         else if (BASIC_STATE.equals(userState)) {
             output = processServiceCommand(applicationUser, text);
@@ -67,9 +73,17 @@ public class MainServiceImpl implements MainService {
         if (isNotAllowToSendContent(chatId, applicationUser)) {
             return;
         }
-        //TODO: Добавить сохранение документа
-        String answer = "Документ успешно загружен! Ссылка для скачивания ******";
-        sendAnswer(answer, chatId);
+        try {
+            ApplicationDocument doc = fileService.processDoc(update.getMessage());
+            //TODO Добавить генерацию ссылки для скачивания документа
+            var answer = "Документ успешно загружен! "
+                    + "Ссылка для скачивания: http://test.ru/get-doc/777";
+            sendAnswer(answer, chatId);
+        } catch (UploadFileException ex) {
+            log.error(ex.getMessage(),ex);
+            String error = "К сожалению, загрузка файла не удалась. Повторите попытку позже.";
+            sendAnswer(error, chatId);
+        }
     }
 
     private boolean isNotAllowToSendContent(long chatId, ApplicationUser applicationUser) {
@@ -110,17 +124,18 @@ public class MainServiceImpl implements MainService {
     }
 
     private String processServiceCommand(ApplicationUser applicationUser, String text) {
-        if (REGISTRATION.equals(text)) {
-            //TODO: добавить регистрацию
-            return "Функицонал пока отстутсвует!";
-        } else if (HELP.equals(text)) {
+        var serviceCommand = BotCommands.fromValue(text);
+        if (REGISTRATION.equals(serviceCommand)) {
+            //TODO добавить регистрацию
+            return "Временно недоступно.";
+        } else if (HELP.equals(serviceCommand)) {
             return help();
-        } else if (START.equals(text)) {
+        } else if (START.equals(serviceCommand)) {
             return "Приветствую! Чтобы посмотреть список доступных команд введите /help";
-        } else
-            return "Чтобы посмотреть список доступных команд введите /help";
+        } else {
+            return "Неизвестная команда! Чтобы посмотреть список доступных команд введите /help";
+        }
     }
-
     private String help() {
         return """
                 Список доступных команд:
