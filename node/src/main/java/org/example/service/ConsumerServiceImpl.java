@@ -36,11 +36,13 @@ public class ConsumerServiceImpl implements ConsumerService {
     @Override
     public void consumePhotoMessageUpdate(Update update) {
         log.info("Выполняется консьюмер фото");
+        mainService.processPhotoMessage(update);
     }
 
     @RabbitListener(queues = DOC_MESSAGE_UPDATE)
     @Override
     public void consumeDocumentMessageUpdate(Update update) {
         log.info("Выполняется консьюмер документа");
+        mainService.processDocumentMessage(update);
     }
 }
