@@ -17,6 +17,8 @@ logs/
 .springBeans
 .sts4-cache
 *.log
+mvnw
+mvnw.cmd
 
 ### IntelliJ IDEA ###
 .idea
