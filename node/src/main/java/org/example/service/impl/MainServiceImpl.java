@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.exceptions.UploadFileException;
 import org.example.model.ApplicationDocument;
+import org.example.model.ApplicationPhoto;
 import org.example.model.ApplicationUser;
 import org.example.model.MessageEntity;
 import org.example.model.enums.UserState;
@@ -108,9 +109,18 @@ public class MainServiceImpl implements MainService {
         if (isNotAllowToSendContent(chatId, applicationUser)) {
             return;
         }
-        //TODO: Добавить сохранение фото
-        String answer = "Фото успешно загружено! Ссылка для скачивания ******";
-        sendAnswer(answer, chatId);
+
+        try {
+            ApplicationPhoto doc = fileService.processPhoto(update.getMessage());
+            //TODO Добавить генерацию ссылки для скачивания документа
+            var answer = "Документ успешно загружен! "
+                    + "Ссылка для скачивания: http://test.ru/get-doc/777";
+            sendAnswer(answer, chatId);
+        } catch (UploadFileException ex) {
+            log.error(ex.getMessage(),ex);
+            String error = "К сожалению, загрузка файла не удалась. Повторите попытку позже.";
+            sendAnswer(error, chatId);
+        }
     }
 
     private void sendAnswer(String output, long chatId) {
