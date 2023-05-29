@@ -36,19 +36,4 @@ public class FileServiceImpl implements FileService {
         long l = encryptionTool.hashOff(id);
         return applicationPhotoRepository.findById(l);
     }
-
-    @Override
-    public FileSystemResource getFileSystemResource(BinaryContent binaryContent) {
-        try {
-            File tempFile = File.createTempFile("tempFile", ".bin");
-            tempFile.deleteOnExit();
-            FileUtils.writeByteArrayToFile(tempFile, binaryContent.getFileAsArrayOfBytes());
-            return new FileSystemResource(tempFile);
-        } catch (IOException e) {
-            log.error("Ooops", e);
-            return null;
-        }
-
-
-    }
 }

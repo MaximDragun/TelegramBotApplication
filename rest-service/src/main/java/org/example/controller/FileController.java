@@ -7,7 +7,6 @@ import org.example.model.ApplicationDocument;
 import org.example.model.ApplicationPhoto;
 import org.example.model.BinaryContent;
 import org.example.service.FileService;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -25,47 +27,46 @@ public class FileController {
     private final FileService fileService;
 
     @GetMapping("/get-document")
-    public ResponseEntity<?> getDocument(@RequestParam("id") String id) {
+    public void getDocument(@RequestParam("id") String id, HttpServletResponse response) {
         Optional<ApplicationDocument> doc = fileService.getDocument(id);
+        if (doc.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        ApplicationDocument applicationDocument = doc.get();
+        response.setContentType(MediaType.parseMediaType(applicationDocument.getMimeType()).toString());
+        response.setHeader("Content-disposition", "attachment; filename=" + applicationDocument.getDocName());
+        response.setStatus(HttpServletResponse.SC_OK);
 
-        if (doc.isPresent()) {
-            ApplicationDocument appDoc = doc.get();
-            BinaryContent binaryContent = appDoc.getBinaryContent();
-
-            FileSystemResource fileSystemResource = fileService.getFileSystemResource(binaryContent);
-
-            if (fileSystemResource == null) {
-
-                return ResponseEntity.internalServerError().build();
-            } else {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.parseMediaType(appDoc.getMimeType()))
-                        .header("Content-disposition", "attachment; filename=" + appDoc.getDocName())
-                        .body(fileSystemResource);
-            }
-        } else {
-            return ResponseEntity.badRequest().build();
+        BinaryContent binaryContent = applicationDocument.getBinaryContent();
+        try (ServletOutputStream out = response.getOutputStream()) {
+            out.write(binaryContent.getFileAsArrayOfBytes());
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/get-photo")
-    public ResponseEntity<?> getPhoto(@RequestParam("id") String id) {
+    public void getPhoto(@RequestParam("id") String id, HttpServletResponse response) {
         Optional<ApplicationPhoto> photo = fileService.getPhoto(id);
-        if (photo.isPresent()) {
-            ApplicationPhoto appPhoto = photo.get();
-            BinaryContent binaryContent = appPhoto.getBinaryContent();
-            FileSystemResource fileSystemResource = fileService.getFileSystemResource(binaryContent);
-            if (fileSystemResource == null) {
-                return ResponseEntity.internalServerError().build();
-            } else {
-                String randomPhotoName = RandomStringUtils.randomAlphanumeric(11, 11);
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG)
-                        .header("Content-disposition", "attachment; filename=" + randomPhotoName + ".jpg")
-                        .body(fileSystemResource);
-            }
-        } else {
-            return ResponseEntity.badRequest().build();
+        if (photo.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        ApplicationPhoto applicationPhoto = photo.get();
+        String randomPhotoName = RandomStringUtils.randomAlphanumeric(11, 11);
+        response.setContentType(MediaType.IMAGE_JPEG.toString());
+        response.setHeader("Content-disposition", "attachment; filename=" + randomPhotoName + ".jpg");
+        response.setStatus(HttpServletResponse.SC_OK);
+        BinaryContent binaryContent = applicationPhoto.getBinaryContent();
+        try {
+            ServletOutputStream out = response.getOutputStream();
+            out.write(binaryContent.getFileAsArrayOfBytes());
+            out.close();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

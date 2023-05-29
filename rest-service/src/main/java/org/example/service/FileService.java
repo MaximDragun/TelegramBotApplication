@@ -10,5 +10,4 @@ import java.util.Optional;
 public interface FileService {
     Optional<ApplicationDocument> getDocument(String id);
     Optional<ApplicationPhoto> getPhoto(String id);
-    FileSystemResource getFileSystemResource(BinaryContent binaryContent);
 }
