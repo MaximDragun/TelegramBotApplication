@@ -12,8 +12,9 @@ import static org.example.model.RabbitQueue.ANSWER_MESSAGE;
 @RequiredArgsConstructor
 public class ProducerServiceImpl implements ProducerService {
     private final RabbitTemplate rabbitTemplate;
+
     @Override
     public void produceAnswer(SendMessage sendMessage) {
-        rabbitTemplate.convertAndSend(ANSWER_MESSAGE,sendMessage);
+        rabbitTemplate.convertAndSend(ANSWER_MESSAGE, sendMessage);
     }
 }

@@ -72,7 +72,6 @@ public class TelegramBotController {
         log.info("Документ получен");
     }
 
-
     private void processTextMessage(Update update) {
         updateProducer.produce(TEXT_MESSAGE_UPDATE, update);
     }

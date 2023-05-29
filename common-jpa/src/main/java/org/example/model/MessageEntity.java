@@ -21,7 +21,6 @@ public class MessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private Update update;

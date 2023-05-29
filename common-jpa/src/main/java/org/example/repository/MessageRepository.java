@@ -1,4 +1,4 @@
-package org.example.repositories;
+package org.example.repository;
 
 import org.example.model.MessageEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -7,5 +7,7 @@ import java.util.Optional;
 
 
 public interface ApplicationUserRepository extends JpaRepository<ApplicationUser,Long> {
-    Optional<ApplicationUser> findApplicationUserByTelegramUserId(Long id);
+    Optional<ApplicationUser> findByTelegramUserId(Long id);
+
+    Optional<ApplicationUser> findByEmail(String email);
 }

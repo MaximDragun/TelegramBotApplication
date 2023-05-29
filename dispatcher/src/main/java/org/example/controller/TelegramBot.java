@@ -21,7 +21,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Autowired
     private TelegramBotController telegramBotController;
 
-
     @Override
     public void onUpdateReceived(Update update) {
         telegramBotController.processUpdate(update);

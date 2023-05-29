@@ -1,14 +1,17 @@
 package org.example.service.impl;
+
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
+import org.example.EncryptionTool;
 import org.example.exceptions.UploadFileException;
 import org.example.model.ApplicationDocument;
 import org.example.model.ApplicationPhoto;
+import org.example.model.BinaryContent;
 import org.example.repository.ApplicationDocumentRepository;
 import org.example.repository.ApplicationPhotoRepository;
 import org.example.repository.BinaryContentRepository;
+import org.example.service.FileService;
+import org.example.service.enums.LinkType;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -16,20 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.example.model.BinaryContent;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.file.Files;
-
-import org.example.service.FileService;
-import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 
 
 @Slf4j
@@ -42,11 +36,13 @@ public class FileServiceImpl implements FileService {
     private String fileInfoUri;
     @Value("${service.file_storage.uri}")
     private String fileStorageUri;
+    @Value("${link.address}")
+    private String linkAddress;
 
+    private final EncryptionTool encryptionTool;
     private final ApplicationDocumentRepository applicationDocumentRepository;
     private final ApplicationPhotoRepository applicationPhotoRepository;
     private final BinaryContentRepository binaryContentDAO;
-
 
 
     @Override
@@ -62,10 +58,10 @@ public class FileServiceImpl implements FileService {
             throw new UploadFileException("Bad response from telegram service: " + response);
         }
     }
+
     @Override
     public ApplicationPhoto processPhoto(Message telegramMessage) {
-        //TODO: Обработать коллекцию фото, а не одно фото
-        PhotoSize telegramPhoto = telegramMessage.getPhoto().get(0);
+        PhotoSize telegramPhoto = telegramMessage.getPhoto().get(telegramMessage.getPhoto().size() - 1);
         String fileId = telegramPhoto.getFileId();
         ResponseEntity<String> response = getFilePath(fileId);
         if (response.getStatusCode() == HttpStatus.OK) {
@@ -77,6 +73,11 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    @Override
+    public String genericLink(Long fileId, LinkType linkType) {
+        String hashLink = encryptionTool.hashOn(fileId);
+        return "http://" + linkAddress + "/" + linkType + "?id=" + hashLink;
+    }
 
 
     private BinaryContent getPersistentBinaryContent(ResponseEntity<String> response) {
@@ -90,7 +91,7 @@ public class FileServiceImpl implements FileService {
 
     private static String getFilePath(ResponseEntity<String> response) {
         JSONObject jsonObject = new JSONObject(response.getBody());
-        return  String.valueOf(jsonObject
+        return String.valueOf(jsonObject
                 .getJSONObject("result")
                 .getString("file_path"));
 

@@ -19,6 +19,9 @@
 		<module>rabbitMQ-support</module>
         <module>node</module>
         <module>common-jpa</module>
+        <module>rest-service</module>
+        <module>common-utils</module>
+        <module>mail-service</module>
     </modules>
 
 	<properties>
@@ -36,6 +39,11 @@
 			<optional>true</optional>
 		</dependency>
 
+<!--		<dependency>-->
+<!--			<groupId>org.liquibase</groupId>-->
+<!--			<artifactId>liquibase-core</artifactId>-->
+<!--			<version>4.22.0</version>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -47,6 +55,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 
 	</dependencies>
 

@@ -8,27 +8,23 @@ import org.example.model.ApplicationPhoto;
 import org.example.model.ApplicationUser;
 import org.example.model.MessageEntity;
 import org.example.model.enums.UserState;
-import org.example.repositories.MessageRepository;
+import org.example.repository.ApplicationUserRepository;
+import org.example.repository.MessageRepository;
+import org.example.service.ApplicationUserService;
 import org.example.service.FileService;
 import org.example.service.MainService;
 import org.example.service.ProducerService;
 import org.example.service.enums.BotCommands;
+import org.example.service.enums.LinkType;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.example.repository.ApplicationUserRepository;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Locale;
 import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
-import static org.example.model.enums.UserState.*;
+import static org.example.model.enums.UserState.BASIC_STATE;
+import static org.example.model.enums.UserState.WAIT_FOR_EMAIL;
 import static org.example.service.enums.BotCommands.*;
 
 @Service
@@ -39,6 +35,7 @@ public class MainServiceImpl implements MainService {
     private final ProducerService producerService;
     private final ApplicationUserRepository applicationUserRepository;
     private final FileService fileService;
+    private final ApplicationUserService applicationUserService;
 
     @Override
     public void processTextMessage(Update update) {
@@ -56,7 +53,7 @@ public class MainServiceImpl implements MainService {
         else if (BASIC_STATE.equals(userState)) {
             output = processServiceCommand(applicationUser, text);
         } else if (WAIT_FOR_EMAIL.equals(userState)) {
-            //TODO добавить обработку почты
+            output = applicationUserService.setEmail(applicationUser, text);
         } else {
             log.error("Ошибка в приеме текста " + userState);
             output = "Неизвестное состояние введите /cancel";
@@ -76,12 +73,12 @@ public class MainServiceImpl implements MainService {
         }
         try {
             ApplicationDocument doc = fileService.processDoc(update.getMessage());
-            //TODO Добавить генерацию ссылки для скачивания документа
-            var answer = "Документ успешно загружен! "
-                    + "Ссылка для скачивания: http://test.ru/get-doc/777";
+            String link = fileService.genericLink(doc.getId(), LinkType.GET_DOC);
+            String answer = "Документ успешно загружен! "
+                    + "Ссылка для скачивания: " + link;
             sendAnswer(answer, chatId);
         } catch (UploadFileException ex) {
-            log.error(ex.getMessage(),ex);
+            log.error(ex.getMessage(), ex);
             String error = "К сожалению, загрузка файла не удалась. Повторите попытку позже.";
             sendAnswer(error, chatId);
         }
@@ -93,7 +90,7 @@ public class MainServiceImpl implements MainService {
             String error = "Зарегистрируйтесь или активируйте свою учетную запись";
             sendAnswer(error, chatId);
             return true;
-        } else if (!BASIC_STATE.equals(applicationUser.getUserState())){
+        } else if (!BASIC_STATE.equals(applicationUser.getUserState())) {
             String error = "Отмените последнюю команду с помощью /cancel для отправки файлов";
             sendAnswer(error, chatId);
             return true;
@@ -111,13 +108,13 @@ public class MainServiceImpl implements MainService {
         }
 
         try {
-            ApplicationPhoto doc = fileService.processPhoto(update.getMessage());
-            //TODO Добавить генерацию ссылки для скачивания документа
-            var answer = "Документ успешно загружен! "
-                    + "Ссылка для скачивания: http://test.ru/get-doc/777";
+            ApplicationPhoto photo = fileService.processPhoto(update.getMessage());
+            String link = fileService.genericLink(photo.getId(), LinkType.GET_PHOTO);
+            String answer = "Фото успешно загружено! "
+                    + "Ссылка для скачивания: " + link;
             sendAnswer(answer, chatId);
         } catch (UploadFileException ex) {
-            log.error(ex.getMessage(),ex);
+            log.error(ex.getMessage(), ex);
             String error = "К сожалению, загрузка файла не удалась. Повторите попытку позже.";
             sendAnswer(error, chatId);
         }
@@ -136,8 +133,7 @@ public class MainServiceImpl implements MainService {
     private String processServiceCommand(ApplicationUser applicationUser, String text) {
         var serviceCommand = BotCommands.fromValue(text);
         if (REGISTRATION.equals(serviceCommand)) {
-            //TODO добавить регистрацию
-            return "Временно недоступно.";
+            return applicationUserService.registerUser(applicationUser);
         } else if (HELP.equals(serviceCommand)) {
             return help();
         } else if (START.equals(serviceCommand)) {
@@ -146,6 +142,7 @@ public class MainServiceImpl implements MainService {
             return "Неизвестная команда! Чтобы посмотреть список доступных команд введите /help";
         }
     }
+
     private String help() {
         return """
                 Список доступных команд:
@@ -164,7 +161,7 @@ public class MainServiceImpl implements MainService {
 
     private ApplicationUser findOrSaveApplicationUser(Update update) {
         User user = update.getMessage().getFrom();
-        Optional<ApplicationUser> persUser = applicationUserRepository.findApplicationUserByTelegramUserId(user.getId());
+        Optional<ApplicationUser> persUser = applicationUserRepository.findByTelegramUserId(user.getId());
         if (persUser.isPresent())
             return persUser.get();
         else {
@@ -173,8 +170,7 @@ public class MainServiceImpl implements MainService {
                     .userName(user.getUserName())
                     .firstName(user.getFirstName())
                     .lastName(user.getLastName())
-                    //TODO
-                    .isActive(true)
+                    .isActive(false)
                     .userState(BASIC_STATE)
                     .build();
             return applicationUserRepository.save(transientUser);

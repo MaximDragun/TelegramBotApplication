@@ -17,7 +17,7 @@ public enum BotCommands {
     }
 
     public static BotCommands fromValue(String v) {
-        for (BotCommands c: BotCommands.values()) {
+        for (BotCommands c : BotCommands.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

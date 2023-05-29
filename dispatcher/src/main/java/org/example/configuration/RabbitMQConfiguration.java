@@ -15,22 +15,23 @@ public class RabbitMQConfiguration {
         return new Jackson2JsonMessageConverter();
     }
 
-
     @Bean
-    public Queue textMessageQueue(){
+    public Queue textMessageQueue() {
         return new Queue(TEXT_MESSAGE_UPDATE);
     }
+
     @Bean
-    public Queue phototMessageQueue(){
+    public Queue phototMessageQueue() {
         return new Queue(PHOTO_MESSAGE_UPDATE);
     }
+
     @Bean
-    public Queue documentMessageQueue(){
+    public Queue documentMessageQueue() {
         return new Queue(DOC_MESSAGE_UPDATE);
     }
 
     @Bean
-    public Queue answerMessageQueue(){
+    public Queue answerMessageQueue() {
         return new Queue(ANSWER_MESSAGE);
     }
 

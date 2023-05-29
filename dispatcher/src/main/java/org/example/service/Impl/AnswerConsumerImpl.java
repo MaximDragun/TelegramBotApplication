@@ -12,9 +12,7 @@ import static org.example.model.RabbitQueue.ANSWER_MESSAGE;
 @Service
 @RequiredArgsConstructor
 public class AnswerConsumerImpl implements AnswerConsumer {
-
     private final TelegramBotController telegramBotController;
-
 
     @Override
     @RabbitListener(queues = ANSWER_MESSAGE)
