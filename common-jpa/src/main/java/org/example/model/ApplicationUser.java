@@ -25,6 +25,7 @@ public class ApplicationUser {
     private String firstName;
     private String lastName;
     private String userName;
+    private String chatId;
     private String email;
     private Boolean isActive;
     @Enumerated(EnumType.STRING)

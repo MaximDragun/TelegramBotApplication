@@ -132,14 +132,12 @@ public class FileServiceImpl implements FileService {
     private byte[] downloadFile(String filePath) {
         String fullUri = fileStorageUri.replace("{token}", token)
                 .replace("{filePath}", filePath);
-        URL urlObj = null;
+        URL urlObj;
         try {
             urlObj = new URL(fullUri);
-
         } catch (IOException e) {
             throw new UploadFileException(e);
         }
-
         try (InputStream is = urlObj.openStream()) {
             return is.readAllBytes();
         } catch (IOException e) {

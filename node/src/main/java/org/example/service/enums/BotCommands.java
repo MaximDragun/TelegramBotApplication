@@ -4,7 +4,9 @@ public enum BotCommands {
     HELP("/help"),
     REGISTRATION("/registration"),
     CANCEL("/cancel"),
-    START("/start");
+    START("/start"),
+    RESEND("/resend_email"),
+    CHOOSE_ANOTHER_EMAIL("/choose_another_email");
     private final String value;
 
     BotCommands(String value) {

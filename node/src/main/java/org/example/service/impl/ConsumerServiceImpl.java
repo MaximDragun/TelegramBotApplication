@@ -14,16 +14,13 @@ import static org.example.model.RabbitQueue.*;
 @Slf4j
 @RequiredArgsConstructor
 public class ConsumerServiceImpl implements ConsumerService {
-
     private final MainService mainService;
 
     @Override
     @RabbitListener(queues = TEXT_MESSAGE_UPDATE)
     public void consumeTextMessageUpdate(Update update) {
-
         log.info("Execute consumer text");
         mainService.processTextMessage(update);
-
     }
 
     @RabbitListener(queues = PHOTO_MESSAGE_UPDATE)

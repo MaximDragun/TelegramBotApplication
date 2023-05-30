@@ -19,9 +19,7 @@ import static org.example.model.RabbitQueue.*;
 @RequiredArgsConstructor
 public class TelegramBotController {
 
-    @Autowired
-    @Lazy
-    private TelegramBot telegramBot;
+    private final TelegramBot telegramBot;
     private final MessageUtils messageUtils;
     private final UpdateProducer updateProducer;
 
@@ -58,7 +56,7 @@ public class TelegramBotController {
 
     private void SetFileIsReceivedView(Update update) {
         SendMessage sendMessage = messageUtils.generateSendMessage(update,
-                "Файл получен! Идет обработка");
+                "Файл получен! Идет обработка ⌛");
         setView(sendMessage);
     }
 
@@ -69,7 +67,6 @@ public class TelegramBotController {
     private void processDocumentMessage(Update update) {
         updateProducer.produce(DOC_MESSAGE_UPDATE, update);
         SetFileIsReceivedView(update);
-        log.info("Документ получен");
     }
 
     private void processTextMessage(Update update) {

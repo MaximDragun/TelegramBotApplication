@@ -67,9 +67,40 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
             return "Вам на почту отправлено письмо. " +
                     "Перейдите по ссылке в письме для подтверждения регистрации";
         } else {
-            return "Этот emaol уже используется, введите другой email";
+            return "Этот email уже используется, введите другой email";
         }
 
+    }
+
+    @Override
+    public String resendEmail(ApplicationUser applicationUser) {
+       if ( applicationUser.getIsActive())
+           return "Пользователь уже зарегистрирован, повторная отправка не требуется";
+       else if (applicationUser.getEmail() == null) {
+           return "Используйте команду /registration для указания вашей почты";
+       }
+       else {
+           String hashId = encryptionTool.hashOn(applicationUser.getId());
+           ResponseEntity<String> response = sendRequestToMailService(hashId, applicationUser.getEmail());
+           if (response.getStatusCode() != HttpStatus.OK) {
+               String msg = String.format("Отправка эл. письма на почту %s не удалась", applicationUser.getEmail());
+               log.error(msg);
+               return msg;
+           }
+           return "Вам на почту повторно отправлено письмо. " +
+                   "Перейдите по ссылке в письме для подтверждения регистрации";
+       }
+
+    }
+
+    @Override
+    public String chooseAnotherEmail(ApplicationUser applicationUser) {
+        if (applicationUser.getEmail() == null) {
+            return "Используйте команду /registration для указания вашей почты";
+        }
+        applicationUser.setUserState(WAIT_FOR_EMAIL);
+        applicationUserRepository.save(applicationUser);
+        return "Введите новый email:";
     }
 
     private ResponseEntity<String> sendRequestToMailService(String hashId, String email) {
