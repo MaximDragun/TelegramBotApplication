@@ -119,7 +119,6 @@ public class FileServiceImpl implements FileService {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<>(headers);
-
         return restTemplate.exchange(
                 fileInfoUri,
                 HttpMethod.GET,

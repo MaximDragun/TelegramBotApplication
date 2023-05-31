@@ -1,5 +1,5 @@
 package org.example.service;
 
 public interface UserActivationService {
-    boolean activation(String hashUserId);
+    void activation(String hashUserId);
 }

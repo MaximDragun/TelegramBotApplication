@@ -2,9 +2,9 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.EncryptionTool;
+import org.example.exceptions.NotFoundException;
 import org.example.model.ApplicationUser;
 import org.example.repository.ApplicationUserRepository;
-import org.example.repository.MessageRepository;
 import org.example.service.ProducerService;
 import org.example.service.UserActivationService;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class UserActivationServiceImpl implements UserActivationService {
     private final ProducerService producerService;
 
     @Override
-    public boolean activation(String hashUserId) {
+    public void activation(String hashUserId) {
         Long userId = encryptionTool.hashOff(hashUserId);
         Optional<ApplicationUser> optionalUserId = applicationUserRepository.findById(userId);
         if (optionalUserId.isPresent()) {
@@ -28,9 +28,9 @@ public class UserActivationServiceImpl implements UserActivationService {
             applicationUser.setIsActive(true);
             applicationUserRepository.save(applicationUser);
             sendMessageRegistration(applicationUser);
-            return true;
         }
-        return false;
+       else throw new NotFoundException("ApplicationUser не найден, попробуйте снова");
+
     }
 
     private void sendMessageRegistration(ApplicationUser applicationUser) {

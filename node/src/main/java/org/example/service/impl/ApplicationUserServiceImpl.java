@@ -33,8 +33,11 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
         if (applicationUser.getIsActive()) {
             return "Вы уже зарегистрированы!";
         } else if (applicationUser.getEmail() != null) {
-            return "Вам на почту отправлено письмо. " +
-                    "Перейдите по ссылке для окончания регистрации";
+            return """
+                    Вам на почту отправлено письмо.
+                    Перейдите по ссылке для окончания регистрации.
+                    Для повторной отправки письма введите /resend_email
+                    Для изменения введенной почты введите /choose_another_email""";
         }
         applicationUser.setUserState(WAIT_FOR_EMAIL);
         applicationUserRepository.save(applicationUser);
@@ -54,7 +57,6 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
             applicationUser.setEmail(email);
             applicationUser.setUserState(BASIC_STATE);
             ApplicationUser user = applicationUserRepository.save(applicationUser);
-
             String hashId = encryptionTool.hashOn(user.getId());
             ResponseEntity<String> response = sendRequestToMailService(hashId, email);
             if (response.getStatusCode() != HttpStatus.OK) {

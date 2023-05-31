@@ -19,10 +19,8 @@ public class ActivationController {
 
     @GetMapping("/activation")
     public ResponseEntity<String> activation(@RequestParam("id") String id) {
-        boolean activation = userActivationService.activation(id);
-        if (activation)
-            return ResponseEntity.ok("Регистрация прошла успешно!");
-        return ResponseEntity.internalServerError().body("Регистрация завершилась с ошибкой! Попробуйте снова");
+       userActivationService.activation(id);
+        return ResponseEntity.ok("Регистрация прошла успешно!");
     }
 
 }

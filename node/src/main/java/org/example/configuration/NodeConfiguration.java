@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 public class NodeConfiguration {
     @Value("${salt}")
     private String salt;
-
     @Bean
     public EncryptionTool getEncryptTool() {
         return new EncryptionTool(salt);

@@ -24,5 +24,4 @@ public class MessageEntity {
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private Update update;
-
 }

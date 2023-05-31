@@ -1,23 +1,20 @@
-package org.example.controller;
+package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.service.UpdateProducer;
 import org.example.utils.MessageUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static org.example.model.RabbitQueue.*;
 
-@Component
+
 @Slf4j
 @RequiredArgsConstructor
-public class TelegramBotController {
+@Service
+public class TelegramBotMainService {
 
     private final TelegramBot telegramBot;
     private final MessageUtils messageUtils;

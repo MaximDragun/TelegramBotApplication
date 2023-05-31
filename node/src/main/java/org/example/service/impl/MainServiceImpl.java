@@ -16,28 +16,42 @@ import org.example.service.MainService;
 import org.example.service.ProducerService;
 import org.example.service.enums.BotCommands;
 import org.example.service.enums.LinkType;
+import org.example.service.strategyBotCommand.BotCommandStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 import static org.example.model.enums.UserState.BASIC_STATE;
 import static org.example.model.enums.UserState.WAIT_FOR_EMAIL;
-import static org.example.service.enums.BotCommands.*;
+import static org.example.service.enums.BotCommands.CANCEL;
 
-@Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
+@Service
 public class MainServiceImpl implements MainService {
     private final MessageRepository messageRepository;
     private final ProducerService producerService;
     private final ApplicationUserRepository applicationUserRepository;
     private final FileService fileService;
     private final ApplicationUserService applicationUserService;
+    private Map<BotCommands, BotCommandStrategy> strategyMap;
 
-
+    @Autowired
+    public void setStrategyMap(List<BotCommandStrategy> botCommandStrategies) {
+        this.strategyMap = botCommandStrategies.stream().collect(toMap(BotCommandStrategy::myCommands,
+                identity(),
+                (key1, key2) -> key1,
+                () -> new EnumMap<>(BotCommands.class)));
+    }
 
     @Override
     public void processDocumentMessage(Update update) {
@@ -96,6 +110,7 @@ public class MainServiceImpl implements MainService {
             sendAnswer(error, chatId);
         }
     }
+
     @Override
     public void processTextMessage(Update update) {
         saveMessage(update);
@@ -132,36 +147,14 @@ public class MainServiceImpl implements MainService {
 
     private String processServiceCommand(ApplicationUser applicationUser, String text) {
         BotCommands serviceCommand = BotCommands.fromValue(text);
-        if (REGISTRATION.equals(serviceCommand)) {
-            return applicationUserService.registerUser(applicationUser);
-        } else if (HELP.equals(serviceCommand)) {
-            return help();
-        } else if (START.equals(serviceCommand)) {
-            return """
-                     Приветствую путник!
-                     Данный бот умеет немного, основное его великое предназначение - быть файлообменником фотографий и документов.
-                     Для использования файлообменника необходимо сначала зарегистрироваться, команда /registration.
-                     P.S. можно использовать temp-mail если не хочется палить свою почту! :)
-                     Чтобы посмотреть список доступных команд введите /help
-                     """;
-        } else if (RESEND.equals(serviceCommand)) {
-            return applicationUserService.resendEmail(applicationUser);
-        } else if (CHOOSE_ANOTHER_EMAIL.equals(serviceCommand)) {
-            return applicationUserService.chooseAnotherEmail(applicationUser);
+        if (serviceCommand != null) {
+            BotCommandStrategy botCommandStrategy = strategyMap.get(serviceCommand);
+            return botCommandStrategy.sendAnswer(applicationUser);
         } else {
             return "Неизвестная команда! Чтобы посмотреть список доступных команд введите /help";
         }
     }
 
-    private String help() {
-        return """
-                Список доступных команд:
-                /registration - регистрация пользователя
-                /resend_email - отправить письмо регистрации еще раз
-                /choose_another_email - изменить почту для регистрации или после регистрации
-                /cancel - отмена выполнения текущей команды
-                """;
-    }
 
     private String cancelProcess(ApplicationUser applicationUser) {
         applicationUser.setUserState(BASIC_STATE);
