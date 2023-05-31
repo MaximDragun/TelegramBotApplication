@@ -10,10 +10,6 @@ import static org.example.model.RabbitQueue.*;
 
 @Configuration
 public class RabbitMQConfiguration {
-    @Bean
-    public MessageConverter jsonMessageConverter() {
-        return new Jackson2JsonMessageConverter();
-    }
 
     @Bean
     public Queue textMessageQueue() {

@@ -68,7 +68,7 @@ public class MainServiceImpl implements MainService {
                     + "Ссылка для скачивания: " + link;
             sendAnswer(answer, chatId);
         } catch (UploadFileException ex) {
-            log.error(ex.getMessage(), ex);
+            log.error("Ошибка при загрузке документа из телеграма, ошибка -  {}",ex.getMessage());
             String error = "К сожалению, загрузка файла не удалась. ❌\n" +
                     "Повторите попытку позже.";
             sendAnswer(error, chatId);
@@ -96,7 +96,6 @@ public class MainServiceImpl implements MainService {
         if (isNotAllowToSendContent(chatId, applicationUser)) {
             return;
         }
-
         try {
             ApplicationPhoto photo = fileService.processPhoto(update.getMessage());
             String link = fileService.genericLink(photo.getId(), LinkType.GET_PHOTO);
@@ -104,7 +103,7 @@ public class MainServiceImpl implements MainService {
                     + "Ссылка для скачивания: " + link;
             sendAnswer(answer, chatId);
         } catch (UploadFileException ex) {
-            log.error(ex.getMessage(), ex);
+            log.error("Ошибка загрузки файла {}",ex.getMessage());
             String error = "К сожалению, загрузка файла не удалась. ❌\n" +
                     "Повторите попытку позже.";
             sendAnswer(error, chatId);
@@ -128,7 +127,7 @@ public class MainServiceImpl implements MainService {
         } else if (WAIT_FOR_EMAIL.equals(userState)) {
             output = applicationUserService.setEmail(applicationUser, text);
         } else {
-            log.error("Ошибка в приеме текста " + userState);
+            log.error("Ошибка при приеме команды, текущее состояние - {}", userState);
             output = "Неизвестное состояние введите /cancel";
         }
         sendAnswer(output, update.getMessage().getChatId());

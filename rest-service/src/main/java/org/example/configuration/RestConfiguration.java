@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.configuration;
 
 import org.example.EncryptionTool;
 import org.springframework.beans.factory.annotation.Value;

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
-@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/download_file")
 @RestController

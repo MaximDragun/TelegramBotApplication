@@ -11,7 +11,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import static org.example.model.RabbitQueue.*;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class ConsumerServiceImpl implements ConsumerService {
     private final MainService mainService;
@@ -19,21 +18,18 @@ public class ConsumerServiceImpl implements ConsumerService {
     @Override
     @RabbitListener(queues = TEXT_MESSAGE_UPDATE)
     public void consumeTextMessageUpdate(Update update) {
-        log.info("Execute consumer text");
         mainService.processTextMessage(update);
     }
 
     @RabbitListener(queues = PHOTO_MESSAGE_UPDATE)
     @Override
     public void consumePhotoMessageUpdate(Update update) {
-        log.info("Выполняется консьюмер фото");
         mainService.processPhotoMessage(update);
     }
 
     @RabbitListener(queues = DOC_MESSAGE_UPDATE)
     @Override
     public void consumeDocumentMessageUpdate(Update update) {
-        log.info("Выполняется консьюмер документа");
         mainService.processDocumentMessage(update);
     }
 }

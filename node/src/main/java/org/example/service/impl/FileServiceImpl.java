@@ -27,8 +27,8 @@ import java.net.URL;
 
 
 @Slf4j
-@Service
 @RequiredArgsConstructor
+@Service
 public class FileServiceImpl implements FileService {
     @Value("${token}")
     private String token;
@@ -43,6 +43,7 @@ public class FileServiceImpl implements FileService {
     private final ApplicationDocumentRepository applicationDocumentRepository;
     private final ApplicationPhotoRepository applicationPhotoRepository;
     private final BinaryContentRepository binaryContentDAO;
+    private final RestTemplate restTemplate;
 
 
     @Override
@@ -116,7 +117,6 @@ public class FileServiceImpl implements FileService {
     }
 
     private ResponseEntity<String> getFilePath(String fileId) {
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<>(headers);
         return restTemplate.exchange(
@@ -135,11 +135,13 @@ public class FileServiceImpl implements FileService {
         try {
             urlObj = new URL(fullUri);
         } catch (IOException e) {
+            log.error("Получить uri {} для загрузки файла из телеграма не удалось",fullUri);
             throw new UploadFileException(e);
         }
         try (InputStream is = urlObj.openStream()) {
             return is.readAllBytes();
         } catch (IOException e) {
+            log.error("Загрузить файл из базы телеграма по uri {} не удалось",fullUri);
             throw new UploadFileException(urlObj.toExternalForm(), e);
         }
     }

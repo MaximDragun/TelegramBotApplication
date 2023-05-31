@@ -25,6 +25,7 @@ import static org.example.model.enums.UserState.WAIT_FOR_EMAIL;
 public class ApplicationUserServiceImpl implements ApplicationUserService {
     private final ApplicationUserRepository applicationUserRepository;
     private final EncryptionTool encryptionTool;
+    private final RestTemplate restTemplate;
     @Value("${service.mail.uri}")
     private String mailServiceUri;
 
@@ -76,22 +77,21 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
 
     @Override
     public String resendEmail(ApplicationUser applicationUser) {
-       if ( applicationUser.getIsActive())
-           return "Пользователь уже зарегистрирован, повторная отправка не требуется";
-       else if (applicationUser.getEmail() == null) {
-           return "Используйте команду /registration для указания вашей почты";
-       }
-       else {
-           String hashId = encryptionTool.hashOn(applicationUser.getId());
-           ResponseEntity<String> response = sendRequestToMailService(hashId, applicationUser.getEmail());
-           if (response.getStatusCode() != HttpStatus.OK) {
-               String msg = String.format("Отправка эл. письма на почту %s не удалась", applicationUser.getEmail());
-               log.error(msg);
-               return msg;
-           }
-           return "Вам на почту повторно отправлено письмо. " +
-                   "Перейдите по ссылке в письме для подтверждения регистрации";
-       }
+        if (applicationUser.getIsActive())
+            return "Пользователь уже зарегистрирован, повторная отправка не требуется";
+        else if (applicationUser.getEmail() == null) {
+            return "Используйте команду /registration для указания вашей почты";
+        } else {
+            String hashId = encryptionTool.hashOn(applicationUser.getId());
+            ResponseEntity<String> response = sendRequestToMailService(hashId, applicationUser.getEmail());
+            if (response.getStatusCode() != HttpStatus.OK) {
+                String msg = String.format("Отправка эл. письма на почту %s не удалась", applicationUser.getEmail());
+                log.error(msg);
+                return msg;
+            }
+            return "Вам на почту повторно отправлено письмо. " +
+                    "Перейдите по ссылке в письме для подтверждения регистрации";
+        }
 
     }
 
@@ -106,7 +106,6 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     }
 
     private ResponseEntity<String> sendRequestToMailService(String hashId, String email) {
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         MailDTO mailParam = MailDTO.builder()
