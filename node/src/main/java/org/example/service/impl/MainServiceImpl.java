@@ -103,7 +103,7 @@ public class MainServiceImpl implements MainService {
                     + "Ссылка для скачивания: " + link;
             sendAnswer(answer, chatId);
         } catch (UploadFileException ex) {
-            log.error("Ошибка загрузки файла {}",ex.getMessage());
+            log.error("Ошибка загрузки файла",ex);
             String error = "К сожалению, загрузка файла не удалась. ❌\n" +
                     "Повторите попытку позже.";
             sendAnswer(error, chatId);

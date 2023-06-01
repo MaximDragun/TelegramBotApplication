@@ -15,7 +15,6 @@ import static org.example.model.RabbitQueue.*;
 @RequiredArgsConstructor
 @Service
 public class TelegramBotMainService {
-
     private final TelegramBot telegramBot;
     private final MessageUtils messageUtils;
     private final UpdateProducer updateProducer;
@@ -28,7 +27,7 @@ public class TelegramBotMainService {
         if (update.hasMessage()) {
             distributeMessagesByType(update);
         } else {
-            log.error("Unsupported message type " + update);
+            log.error("Unsupported message type {}",update);
         }
     }
 

@@ -52,7 +52,7 @@ public class FileServiceImpl implements FileService {
         try (ServletOutputStream out = response.getOutputStream()) {
             out.write(binaryContent.getFileAsArrayOfBytes());
         } catch (IOException e) {
-            log.error("Не удалось загрузить документ с Id: {}, ошибка {}",applicationDocument.getId(),e.getMessage());
+            log.error("Не удалось загрузить документ с Id: {}",applicationDocument.getId(),e);
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Не удалось загрузить документ", e);
         }
@@ -68,7 +68,7 @@ public class FileServiceImpl implements FileService {
         try (ServletOutputStream out = response.getOutputStream()) {
             out.write(binaryContent.getFileAsArrayOfBytes());
         } catch (IOException e) {
-            log.error("Не удалось загрузить фото с Id: {}, ошибка {}",applicationPhoto.getId(),e.getMessage());
+            log.error("Не удалось загрузить фото с Id: {}",applicationPhoto.getId(),e);
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Не удалось загрузить фото", e);
         }

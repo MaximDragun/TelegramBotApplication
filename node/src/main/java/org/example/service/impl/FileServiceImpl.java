@@ -135,13 +135,13 @@ public class FileServiceImpl implements FileService {
         try {
             urlObj = new URL(fullUri);
         } catch (IOException e) {
-            log.error("Получить uri {} для загрузки файла из телеграма не удалось",fullUri);
+            log.error("Получить uri {} для загрузки файла из телеграма не удалось",fullUri,e);
             throw new UploadFileException(e);
         }
         try (InputStream is = urlObj.openStream()) {
             return is.readAllBytes();
         } catch (IOException e) {
-            log.error("Загрузить файл из базы телеграма по uri {} не удалось",fullUri);
+            log.error("Загрузить файл из базы телеграма по uri {} не удалось",fullUri,e);
             throw new UploadFileException(urlObj.toExternalForm(), e);
         }
     }
