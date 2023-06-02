@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Результат регистрации</title>
+    <link rel="stylesheet" href="/styles/css/main.css" type="text/css">
+
+</head>
+<body>
+<main >
+    <section class="ant-section__ant012_welcome ">
+
+        <div th:if="${check}" class="banner-parallax" style="background-image: url(/styles/img/img.jpg);">
+
+            <div  class="overlay-colored color-bg-heading opacity-60"></div>
+
+            <div class="slide-content">
+                <div class="container">
+
+                        <div class="col-md-12">
+                            <div  class="banner-center-box text-white" >
+                                <h1 >Регистрация прошла успешно</h1>
+                                <div class="description">
+                                    <h3>Теперь вся мощь SmartBota в ваших руках!</h3>
+                                </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:unless="${check}" class="banner-parallax" style="background-image: url(/styles/img/error.png);">
+
+            <div  class="overlay-colored color-bg-heading opacity-60"></div>
+
+            <div class="slide-content">
+                <div class="container">
+                    <div class="col-md-12">
+                        <div  class="banner-center-box text-white" >
+                            <h1 >Ошибка при регистрации</h1>
+                            <div class="description">
+                                <h2>Попробуйте зарегистрироваться через некоторое время</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</main>
+</body>
+</html>

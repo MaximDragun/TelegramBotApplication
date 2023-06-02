@@ -77,7 +77,8 @@ public class FileServiceImpl implements FileService {
     @Override
     public String genericLink(Long fileId, LinkType linkType) {
         String hashLink = encryptionTool.hashOn(fileId);
-        return "http://" + linkAddress + "/" + linkType + "?id=" + hashLink;
+        return "[click me](http://" + linkAddress + "/" + linkType + "?id=" + hashLink+")";
+
     }
 
 

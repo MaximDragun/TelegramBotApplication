@@ -19,6 +19,7 @@ import org.example.service.enums.LinkType;
 import org.example.service.strategyBotCommand.BotCommandStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -65,8 +66,8 @@ public class MainServiceImpl implements MainService {
             ApplicationDocument doc = fileService.processDoc(update.getMessage());
             String link = fileService.genericLink(doc.getId(), LinkType.GET_DOC);
             String answer = "Документ успешно загружен! ✅ \n"
-                    + "Ссылка для скачивания: " + link;
-            sendAnswer(answer, chatId);
+                    + "Ссылка для скачивания: "+link;
+            sendAnswerForFormat(answer,chatId);
         } catch (UploadFileException ex) {
             log.error("Ошибка при загрузке документа из телеграма, ошибка -  {}",ex.getMessage());
             String error = "К сожалению, загрузка файла не удалась. ❌\n" +
@@ -101,7 +102,7 @@ public class MainServiceImpl implements MainService {
             String link = fileService.genericLink(photo.getId(), LinkType.GET_PHOTO);
             String answer = "Фото успешно загружено! ✅ \n"
                     + "Ссылка для скачивания: " + link;
-            sendAnswer(answer, chatId);
+            sendAnswerForFormat(answer,chatId);
         } catch (UploadFileException ex) {
             log.error("Ошибка загрузки файла",ex);
             String error = "К сожалению, загрузка файла не удалась. ❌\n" +
@@ -140,6 +141,13 @@ public class MainServiceImpl implements MainService {
         sendMessage.setChatId(chatId);
 //        sendMessage.setText("Сегодня: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEEE, d MMM yyyy HH:mm", Locale.of("RU"))) + "\n" +
 //                "За окном температура тепла: " + tr.nextInt(0, 10) + " градусов");
+        sendMessage.setText(output);
+        producerService.produceAnswer(sendMessage);
+    }
+    private void sendAnswerForFormat(String output, long chatId) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setParseMode(ParseMode.MARKDOWN);
+        sendMessage.setChatId(chatId);
         sendMessage.setText(output);
         producerService.produceAnswer(sendMessage);
     }
