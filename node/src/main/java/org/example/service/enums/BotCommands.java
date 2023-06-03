@@ -6,7 +6,11 @@ public enum BotCommands {
     CANCEL("/cancel"),
     START("/start"),
     RESEND("/resend_email"),
-    CHOOSE_ANOTHER_EMAIL("/choose_another_email");
+    CHOOSE_ANOTHER_EMAIL("/choose_another_email"),
+    WHAT_TO_SEE("/what_to_see"),
+    FILM("Полнометражка \uD83C\uDFAC"),
+    SERIES("Сериал \uD83C\uDF7F");
+
     private final String value;
 
     BotCommands(String value) {

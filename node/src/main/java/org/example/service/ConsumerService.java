@@ -10,5 +10,6 @@ public interface ConsumerService {
     void consumePhotoMessageUpdate(Update update);
 
     void consumeDocumentMessageUpdate(Update update);
+    void consumeCallBackUpdate(Update update);
 
 }

@@ -4,6 +4,6 @@ import org.example.model.ApplicationUser;
 import org.example.service.enums.BotCommands;
 
 public interface BotCommandStrategy {
-    String sendAnswer(ApplicationUser applicationUser);
+    void sendAnswer(ApplicationUser applicationUser, long chatId);
     BotCommands myCommands();
 }

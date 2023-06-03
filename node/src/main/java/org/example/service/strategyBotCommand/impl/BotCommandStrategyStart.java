@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.model.ApplicationUser;
 import org.example.service.enums.BotCommands;
 import org.example.service.strategyBotCommand.BotCommandStrategy;
+import org.example.util.SendMessageUtil;
 import org.springframework.stereotype.Service;
 
 import static org.example.service.enums.BotCommands.*;
@@ -11,9 +12,10 @@ import static org.example.service.enums.BotCommands.*;
 @RequiredArgsConstructor
 @Service
 public class BotCommandStrategyStart implements BotCommandStrategy {
+    private final SendMessageUtil sendMessageUtil;
     @Override
-    public String sendAnswer(ApplicationUser applicationUser) {
-        return start();
+    public void sendAnswer(ApplicationUser applicationUser, long chatId) {
+        sendMessageUtil.sendAnswerDefoult(start(),chatId);
     }
 
     @Override

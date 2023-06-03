@@ -26,8 +26,10 @@ public class TelegramBotMainService {
         }
         if (update.hasMessage()) {
             distributeMessagesByType(update);
+        } else if (update.hasCallbackQuery()) {
+            processCallbackQuery(update);
         } else {
-            log.error("Unsupported message type {}",update);
+            log.error("Unsupported message type {}", update);
         }
     }
 
@@ -63,6 +65,9 @@ public class TelegramBotMainService {
     private void processDocumentMessage(Update update) {
         updateProducer.produce(DOC_MESSAGE_UPDATE, update);
         SetFileIsReceivedView(update);
+    }
+    private void processCallbackQuery(Update update) {
+        updateProducer.produce(CALLBACK_QUERY_UPDATE, update);
     }
 
     private void processTextMessage(Update update) {

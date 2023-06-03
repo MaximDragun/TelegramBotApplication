@@ -12,15 +12,15 @@ import org.example.repository.ApplicationUserRepository;
 import org.example.repository.MessageRepository;
 import org.example.service.ApplicationUserService;
 import org.example.service.FileService;
+import org.example.service.FilmService;
 import org.example.service.MainService;
-import org.example.service.ProducerService;
 import org.example.service.enums.BotCommands;
+import org.example.service.enums.Films;
 import org.example.service.enums.LinkType;
 import org.example.service.strategyBotCommand.BotCommandStrategy;
+import org.example.util.SendMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
@@ -40,10 +40,11 @@ import static org.example.service.enums.BotCommands.CANCEL;
 @Service
 public class MainServiceImpl implements MainService {
     private final MessageRepository messageRepository;
-    private final ProducerService producerService;
     private final ApplicationUserRepository applicationUserRepository;
     private final FileService fileService;
     private final ApplicationUserService applicationUserService;
+    private final FilmService filmService;
+    private final SendMessageUtil sendMessageUtil;
     private Map<BotCommands, BotCommandStrategy> strategyMap;
 
     @Autowired
@@ -66,24 +67,24 @@ public class MainServiceImpl implements MainService {
             ApplicationDocument doc = fileService.processDoc(update.getMessage());
             String link = fileService.genericLink(doc.getId(), LinkType.GET_DOC);
             String answer = "Документ успешно загружен! ✅ \n"
-                    + "Ссылка для скачивания: "+link;
-            sendAnswerForFormat(answer,chatId);
+                    + "Ссылка для скачивания: " + link;
+            sendMessageUtil.sendAnswerForFormatLink(answer, chatId);
         } catch (UploadFileException ex) {
-            log.error("Ошибка при загрузке документа из телеграма, ошибка -  {}",ex.getMessage());
+            log.error("Ошибка при загрузке документа из телеграма, ошибка -  {}", ex.getMessage());
             String error = "К сожалению, загрузка файла не удалась. ❌\n" +
                     "Повторите попытку позже.";
-            sendAnswer(error, chatId);
+            sendMessageUtil.sendAnswerDefoult(error, chatId);
         }
     }
 
     private boolean isNotAllowToSendContent(long chatId, ApplicationUser applicationUser) {
         if (!applicationUser.getIsActive()) {
             String error = "Зарегистрируйтесь для отправки фото и документов! \ud83d\udee1";
-            sendAnswer(error, chatId);
+            sendMessageUtil.sendAnswerDefoult(error, chatId);
             return true;
         } else if (!BASIC_STATE.equals(applicationUser.getUserState())) {
             String error = "Отмените последнюю команду с помощью /cancel для отправки файлов";
-            sendAnswer(error, chatId);
+            sendMessageUtil.sendAnswerDefoult(error, chatId);
             return true;
         }
         return false;
@@ -102,63 +103,61 @@ public class MainServiceImpl implements MainService {
             String link = fileService.genericLink(photo.getId(), LinkType.GET_PHOTO);
             String answer = "Фото успешно загружено! ✅ \n"
                     + "Ссылка для скачивания: " + link;
-            sendAnswerForFormat(answer,chatId);
+            sendMessageUtil.sendAnswerForFormatLink(answer, chatId);
         } catch (UploadFileException ex) {
-            log.error("Ошибка загрузки файла",ex);
+            log.error("Ошибка загрузки файла", ex);
             String error = "К сожалению, загрузка файла не удалась. ❌\n" +
                     "Повторите попытку позже.";
-            sendAnswer(error, chatId);
+            sendMessageUtil.sendAnswerDefoult(error, chatId);
         }
+    }
+
+    @Override
+    public void processCallBack(Update update) {
+        String link;
+        long chatId = update.getCallbackQuery().getMessage().getChatId();
+        String text = update.getCallbackQuery().getData();
+        Films serviceCommand = Films.fromValue(text);
+        if (serviceCommand == null) {
+            log.error("Неизвестная команда CallBack от пользователя с id {} dataCallBack {}", update.getCallbackQuery().getFrom().getId(), text);
+            link = "Выбрана неизвестная команда, попробуйте снова";
+        } else link = serviceCommand.equals(Films.FILM) ? filmService.getLinkForFilm() : filmService.getLinkForSeries();
+        sendMessageUtil.sendAnswerForFormatLinkFilmAddKeyBoard(link, chatId);
     }
 
     @Override
     public void processTextMessage(Update update) {
         saveMessage(update);
-
         ApplicationUser applicationUser = findOrSaveApplicationUser(update);
         UserState userState = applicationUser.getUserState();
         String text = update.getMessage().getText();
         String output;
 
         BotCommands serviceCommand = BotCommands.fromValue(text);
-        if (CANCEL.equals(serviceCommand))
+        if (CANCEL.equals(serviceCommand)) {
             output = cancelProcess(applicationUser);
-        else if (BASIC_STATE.equals(userState)) {
-            output = processServiceCommand(applicationUser, text);
+            sendMessageUtil.sendAnswerDefoult(output, update.getMessage().getChatId());
+        } else if (BASIC_STATE.equals(userState)) {
+            processServiceCommand(applicationUser, text, update.getMessage().getChatId());
         } else if (WAIT_FOR_EMAIL.equals(userState)) {
             output = applicationUserService.setEmail(applicationUser, text);
+            sendMessageUtil.sendAnswerDefoult(output, update.getMessage().getChatId());
         } else {
             log.error("Ошибка при приеме команды, текущее состояние - {}", userState);
             output = "Неизвестное состояние введите /cancel";
+            sendMessageUtil.sendAnswerDefoult(output, update.getMessage().getChatId());
         }
-        sendAnswer(output, update.getMessage().getChatId());
+
 
     }
 
-    private void sendAnswer(String output, long chatId) {
-//        ThreadLocalRandom tr = ThreadLocalRandom.current();
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-//        sendMessage.setText("Сегодня: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEEE, d MMM yyyy HH:mm", Locale.of("RU"))) + "\n" +
-//                "За окном температура тепла: " + tr.nextInt(0, 10) + " градусов");
-        sendMessage.setText(output);
-        producerService.produceAnswer(sendMessage);
-    }
-    private void sendAnswerForFormat(String output, long chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setParseMode(ParseMode.MARKDOWN);
-        sendMessage.setChatId(chatId);
-        sendMessage.setText(output);
-        producerService.produceAnswer(sendMessage);
-    }
-
-    private String processServiceCommand(ApplicationUser applicationUser, String text) {
+    private void processServiceCommand(ApplicationUser applicationUser, String text, long chatId) {
         BotCommands serviceCommand = BotCommands.fromValue(text);
         if (serviceCommand != null) {
             BotCommandStrategy botCommandStrategy = strategyMap.get(serviceCommand);
-            return botCommandStrategy.sendAnswer(applicationUser);
+            botCommandStrategy.sendAnswer(applicationUser, chatId);
         } else {
-            return "Неизвестная команда! Чтобы посмотреть список доступных команд введите /help";
+            sendMessageUtil.sendAnswerDefoult("Неизвестная команда! Чтобы посмотреть список доступных команд введите /help", chatId);
         }
     }
 

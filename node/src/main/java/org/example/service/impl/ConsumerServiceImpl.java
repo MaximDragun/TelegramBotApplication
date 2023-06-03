@@ -32,4 +32,9 @@ public class ConsumerServiceImpl implements ConsumerService {
     public void consumeDocumentMessageUpdate(Update update) {
         mainService.processDocumentMessage(update);
     }
+    @RabbitListener(queues = CALLBACK_QUERY_UPDATE)
+    @Override
+    public void consumeCallBackUpdate(Update update) {
+        mainService.processCallBack(update);
+    }
 }

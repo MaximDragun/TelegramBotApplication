@@ -27,6 +27,10 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
+    public Queue callBackQueue() {
+        return new Queue(CALLBACK_QUERY_UPDATE);
+    }
+    @Bean
     public Queue answerMessageQueue() {
         return new Queue(ANSWER_MESSAGE);
     }

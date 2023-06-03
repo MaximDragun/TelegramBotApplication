@@ -47,6 +47,7 @@ public class TelegramBot extends TelegramWebhookBot {
         menuBotCommands.add(new BotCommand("/registration", "регистрация пользователя"));
         menuBotCommands.add(new BotCommand("/resend_email", "отправить письмо еще раз"));
         menuBotCommands.add(new BotCommand("/choose_another_email", "поменять указанную почту"));
+        menuBotCommands.add(new BotCommand("/what_to_see", "случайный фильм или сериал"));
         menuBotCommands.add(new BotCommand("/help", "список всех команд"));
         menuBotCommands.add(new BotCommand("/cancel", "отмена последней команды"));
         execute(new SetMyCommands(menuBotCommands, new BotCommandScopeDefault(), null));
@@ -82,12 +83,6 @@ public class TelegramBot extends TelegramWebhookBot {
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         return null;
     }
-    public void dfdf(){
-        SendMessage df = new SendMessage();
 
-
-
-
-    }
 
 }

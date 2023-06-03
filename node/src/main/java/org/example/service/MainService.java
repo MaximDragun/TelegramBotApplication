@@ -6,4 +6,5 @@ public interface MainService {
      void processTextMessage(Update update);
      void processDocumentMessage(Update update);
      void processPhotoMessage(Update update);
+     void processCallBack(Update update);
 }

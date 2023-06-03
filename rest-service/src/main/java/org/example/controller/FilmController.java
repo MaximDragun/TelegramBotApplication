@@ -12,19 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/imdb")
 @RestController
 public class FilmController {
- private final    UploadSeriesServiceImpl uploadSeriesService;
- private final UploadFilmServiceImpl uploadFilmService;
+    private final UploadSeriesServiceImpl uploadSeriesService;
+    private final UploadFilmServiceImpl uploadFilmService;
 
 
     @GetMapping("/film")
-    public ResponseEntity<?> uploadFilms(){
+    public ResponseEntity<?> uploadFilms() {
         uploadFilmService.uploadFilms();
         return ResponseEntity.
                 ok()
                 .build();
     }
+
     @GetMapping("/series")
-    public ResponseEntity<?> uploadSeries(){
+    public ResponseEntity<?> uploadSeries() {
         uploadSeriesService.uploadSeries();
         return ResponseEntity.
                 ok()
