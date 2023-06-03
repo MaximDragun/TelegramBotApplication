@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = "id")
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

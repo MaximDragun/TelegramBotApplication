@@ -19,10 +19,12 @@ public class UploadFilmServiceImpl implements UploadFilmService {
     private final RestTemplate restTemplate;
     @Value("${imdb.film.uri}")
     private String filmUri;
+    @Value("${imdb-api.token}")
+    private String imdbApiToken;
 
     @Override
     public void uploadFilms() {
-        Top250Data top250Data = restTemplate.getForObject(filmUri, Top250Data.class);
+        Top250Data top250Data = restTemplate.getForObject(filmUri, Top250Data.class,imdbApiToken);
         if (top250Data == null)
             throw new ResponseStatusException(
                     HttpStatus.NO_CONTENT, "Не удалось получить список фильмов от imdb ip");

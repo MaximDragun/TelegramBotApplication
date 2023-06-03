@@ -19,10 +19,12 @@ public class UploadSeriesServiceImpl implements UploadSeriesService {
     private final RestTemplate restTemplate;
     @Value("${imdb.series.uri}")
     private String seriesUri;
+    @Value("${imdb-api.token}")
+    private String imdbApiToken;
 
     @Override
     public void uploadSeries() {
-        Top250Data top250Data = restTemplate.getForObject(seriesUri, Top250Data.class);
+        Top250Data top250Data = restTemplate.getForObject(seriesUri, Top250Data.class,imdbApiToken);
         if (top250Data == null)
             throw new ResponseStatusException(
                     HttpStatus.NO_CONTENT, "Не удалось получить список сериалов от imdb ip");

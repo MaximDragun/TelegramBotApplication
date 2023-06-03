@@ -8,10 +8,7 @@ import org.example.repository.Top250FilmsRepository;
 import org.example.repository.Top250SeriesRepository;
 import org.example.service.FilmService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,10 +35,12 @@ public class FilmServiceImpl implements FilmService {
         int randomInt = getRandomInt();
         Optional<Top250FilmsModel> optionalFilm = filmsRepository.findById(randomInt);
         if (optionalFilm.isEmpty()){
+            HttpHeaders headers = new HttpHeaders();
+            HttpEntity<String> request = new HttpEntity<>(headers);
             ResponseEntity<String> response = restTemplate.exchange(
                     linkRestFilm,
                     HttpMethod.GET,
-                    HttpEntity.EMPTY,
+                    request,
                     String.class
             );
             if (response.getStatusCode() == HttpStatus.OK){
@@ -67,10 +66,12 @@ public class FilmServiceImpl implements FilmService {
         int randomInt = getRandomInt();
         Optional<Top250SeriesModel> optionalSeries = seriesRepository.findById(randomInt);
         if (optionalSeries.isEmpty()){
+            HttpHeaders headers = new HttpHeaders();
+            HttpEntity<String> request = new HttpEntity<>(headers);
             ResponseEntity<String> response = restTemplate.exchange(
                     linkRestSeries,
                     HttpMethod.GET,
-                    HttpEntity.EMPTY,
+                    request,
                     String.class
             );
             if (response.getStatusCode() == HttpStatus.OK){

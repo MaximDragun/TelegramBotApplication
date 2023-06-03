@@ -1,6 +1,8 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.service.UploadFilmService;
+import org.example.service.UploadSeriesService;
 import org.example.service.impl.UploadFilmServiceImpl;
 import org.example.service.impl.UploadSeriesServiceImpl;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/imdb")
 @RestController
 public class FilmController {
-    private final UploadSeriesServiceImpl uploadSeriesService;
-    private final UploadFilmServiceImpl uploadFilmService;
+    private final UploadSeriesService uploadSeriesService;
+    private final UploadFilmService uploadFilmService;
 
 
     @GetMapping("/film")

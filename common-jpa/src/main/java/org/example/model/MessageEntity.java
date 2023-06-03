@@ -10,7 +10,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = "id")
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

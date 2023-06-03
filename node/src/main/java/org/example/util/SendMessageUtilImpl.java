@@ -1,10 +1,8 @@
 package org.example.util;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.example.service.ProducerService;
 import org.example.service.enums.Films;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -82,12 +80,19 @@ public class SendMessageUtilImpl implements SendMessageUtil {
     private void addDefaultKeyBoard(SendMessage sendMessage){
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
-        KeyboardRow keyboardRow = new KeyboardRow();
-        keyboardRow.add("Первый \uD83C\uDFAC");
-        keyboardRow.add("Второй \uD83C\uDF7F");
-        keyboardRowList.add(keyboardRow);
+        KeyboardRow keyboardRowFirstLine = new KeyboardRow();
+        keyboardRowFirstLine.add("/resend_email");
+        keyboardRowFirstLine.add("/choose_another_email");
+        keyboardRowList.add(keyboardRowFirstLine);
+        KeyboardRow keyboardRowSecondLine = new KeyboardRow();
+        keyboardRowSecondLine.add("/what_to_see");
+        keyboardRowSecondLine.add("/help");
+        keyboardRowSecondLine.add("/cancel");
+        keyboardRowList.add(keyboardRowSecondLine);
+        KeyboardRow keyboardRowThirdLine = new KeyboardRow();
+        keyboardRowThirdLine.add("/registration");
+        keyboardRowList.add(keyboardRowThirdLine);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
-        //TODO:дописать все команды в клавиатуру
     }
 }
