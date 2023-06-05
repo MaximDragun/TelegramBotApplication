@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import static org.example.model.RabbitQueue.*;
 
+
 @Configuration
 public class RabbitMQConfiguration {
 

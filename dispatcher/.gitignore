@@ -3,8 +3,9 @@ target/
 #!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-application-dispatcher2.properties
+../../../SpringSecurityAppNew/SpringSecurity/src/main/resources/static/application-dispatcher2.properties
 **/logs
+application-dispatcher2.properties
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
