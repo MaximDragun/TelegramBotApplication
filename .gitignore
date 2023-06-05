@@ -6,7 +6,7 @@ target/
 #!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-docker-compose-v1.yml
+docker-compose-v2.yml
 logs/
 ### STS ###
 .apt_generated
