@@ -1,8 +1,6 @@
 package org.example.configuration;
 
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,6 +31,15 @@ public class RabbitMQConfiguration {
     @Bean
     public Queue answerMessageQueue() {
         return new Queue(ANSWER_MESSAGE);
+    }
+
+    @Bean
+    public Queue answerPhotoQueue() {
+        return new Queue(ANSWER_PHOTO);
+    }
+    @Bean
+    public Queue answerAnimationQueue() {
+        return new Queue(ANSWER_ANIMATION);
     }
 
 }

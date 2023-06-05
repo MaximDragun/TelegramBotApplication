@@ -5,10 +5,12 @@ import org.example.dto.Top250Data;
 import org.example.dto.Top250DataDetail;
 import org.example.model.Top250SeriesModel;
 import org.example.repository.Top250SeriesRepository;
-import org.example.service.UploadSeriesService;
+import org.example.service.interfaces.UploadSeriesService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -21,10 +23,11 @@ public class UploadSeriesServiceImpl implements UploadSeriesService {
     private String seriesUri;
     @Value("${imdb-api.token}")
     private String imdbApiToken;
-
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public void uploadSeries() {
-        Top250Data top250Data = restTemplate.getForObject(seriesUri, Top250Data.class,imdbApiToken);
+        if (seriesRepository.findById(1).isPresent()) return;
+        Top250Data top250Data = restTemplate.getForObject(seriesUri, Top250Data.class, imdbApiToken);
         if (top250Data == null)
             throw new ResponseStatusException(
                     HttpStatus.NO_CONTENT, "Не удалось получить список сериалов от imdb ip");

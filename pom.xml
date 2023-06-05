@@ -16,8 +16,8 @@
 	<description>create bot on Spring Boot</description>
 	<modules>
 		<module>dispatcher</module>
-		<module>rabbitMQ-support</module>
-        <module>node</module>
+		<module>rabbitMQ-utils</module>
+        <module>main</module>
         <module>common-jpa</module>
         <module>rest-service</module>
         <module>common-utils</module>

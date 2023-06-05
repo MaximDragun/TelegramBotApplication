@@ -52,7 +52,7 @@
         </dependency>
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>rabbitMQ-support</artifactId>
+            <artifactId>rabbitMQ-utils</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

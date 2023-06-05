@@ -3,18 +3,15 @@ package org.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dto.MailDTO;
-import org.example.service.MailService;
+import org.example.service.interfaces.MailService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafProperties;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -47,7 +44,7 @@ public class MailServiceImpl implements MailService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message,
                     MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                     StandardCharsets.UTF_8.name());
-            String subject = "User Account Activation";
+            String subject = "Активация учетной записи пользователя";
             Context context = new Context();
             context.setVariables(mapContext);
             String emailContent = springTemplateEngine.process(emailTemplateLocation, context);

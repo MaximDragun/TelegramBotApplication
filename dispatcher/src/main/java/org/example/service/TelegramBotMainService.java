@@ -2,9 +2,12 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.service.interfaces.UpdateProducer;
 import org.example.utils.MessageUtils;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -60,6 +63,12 @@ public class TelegramBotMainService {
 
     public void setView(SendMessage sendMessage) {
         telegramBot.sendAnswerMessage(sendMessage);
+    }
+    public void setPhoto(SendPhoto sendPhoto) {
+        telegramBot.sendAnswerPhoto(sendPhoto);
+    }
+    public void setAnimation(SendAnimation sendAnimation) {
+        telegramBot.sendAnswerAnimation(sendAnimation);
     }
 
     private void processDocumentMessage(Update update) {

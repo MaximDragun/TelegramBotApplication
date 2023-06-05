@@ -1,10 +1,8 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.service.UploadFilmService;
-import org.example.service.UploadSeriesService;
-import org.example.service.impl.UploadFilmServiceImpl;
-import org.example.service.impl.UploadSeriesServiceImpl;
+import org.example.service.interfaces.UploadFilmService;
+import org.example.service.interfaces.UploadSeriesService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,11 +1,10 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.example.exceptions.NotFoundException;
 import org.example.model.ApplicationDocument;
 import org.example.model.ApplicationPhoto;
-import org.example.service.FileService;
+import org.example.service.interfaces.FileService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

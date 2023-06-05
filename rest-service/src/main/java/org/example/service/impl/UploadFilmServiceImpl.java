@@ -5,10 +5,12 @@ import org.example.dto.Top250Data;
 import org.example.dto.Top250DataDetail;
 import org.example.model.Top250FilmsModel;
 import org.example.repository.Top250FilmsRepository;
-import org.example.service.UploadFilmService;
+import org.example.service.interfaces.UploadFilmService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,9 +24,11 @@ public class UploadFilmServiceImpl implements UploadFilmService {
     @Value("${imdb-api.token}")
     private String imdbApiToken;
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public void uploadFilms() {
-        Top250Data top250Data = restTemplate.getForObject(filmUri, Top250Data.class,imdbApiToken);
+        if (filmsRepository.findById(1).isPresent()) return;
+        Top250Data top250Data = restTemplate.getForObject(filmUri, Top250Data.class, imdbApiToken);
         if (top250Data == null)
             throw new ResponseStatusException(
                     HttpStatus.NO_CONTENT, "Не удалось получить список фильмов от imdb ip");
@@ -32,7 +36,7 @@ public class UploadFilmServiceImpl implements UploadFilmService {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, top250Data.getErrorMessage());
         for (Top250DataDetail item : top250Data.getItems()) {
-            Top250FilmsModel top250FilmsModel =  Top250FilmsModel.builder().idFilm(item.getId()).build();
+            Top250FilmsModel top250FilmsModel = Top250FilmsModel.builder().idFilm(item.getId()).build();
             filmsRepository.save(top250FilmsModel);
         }
     }

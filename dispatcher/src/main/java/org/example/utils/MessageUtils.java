@@ -12,6 +12,7 @@ public class MessageUtils {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(message.getChatId());
         sendMessage.setText(text);
+        sendMessage.setDisableNotification(true);
         return sendMessage;
     }
 }
