@@ -1,5 +1,6 @@
 package org.example.configuration;
 
+import org.example.EncryptionString;
 import org.example.EncryptionTool;
 import org.example.service.enums.BotInline;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,13 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-public class NodeConfiguration {
+public class MainConfiguration {
     @Value("${salt}")
     private String salt;
 
     @Bean
     public EncryptionTool getEncryptTool() {
         return new EncryptionTool(salt);
+    }
+    @Bean
+    public EncryptionString getEncryptionString() {
+        return new EncryptionString(salt);
     }
 
     @Bean

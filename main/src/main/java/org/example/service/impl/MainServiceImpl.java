@@ -2,6 +2,7 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.enums.BotCommands;
 import org.example.exceptions.UploadFileException;
 import org.example.model.ApplicationDocument;
 import org.example.model.ApplicationPhoto;
@@ -10,12 +11,11 @@ import org.example.model.MessageEntity;
 import org.example.model.enums.UserState;
 import org.example.repository.ApplicationUserRepository;
 import org.example.repository.MessageRepository;
+import org.example.service.enums.BotInline;
+import org.example.service.enums.LinkType;
 import org.example.service.interfaces.ApplicationUserService;
 import org.example.service.interfaces.FileService;
 import org.example.service.interfaces.MainService;
-import org.example.service.enums.BotCommands;
-import org.example.service.enums.BotInline;
-import org.example.service.enums.LinkType;
 import org.example.service.strategyBotCommand.interfaces.BotCommandStrategy;
 import org.example.service.strategyBotInline.interfaces.BotInlineStrategy;
 import org.example.util.interfaces.SendMessageUtil;
@@ -33,9 +33,10 @@ import java.util.Optional;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
+import static org.example.enums.BotCommands.CANCEL;
+import static org.example.enums.BotCommands.HELP;
 import static org.example.model.enums.UserState.BASIC_STATE;
 import static org.example.model.enums.UserState.WAIT_FOR_EMAIL;
-import static org.example.service.enums.BotCommands.CANCEL;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -48,7 +49,7 @@ public class MainServiceImpl implements MainService {
     private final SendMessageUtil sendMessageUtil;
     @Lazy
     @Autowired
-    private  MainService mainService;
+    private MainService mainService;
     private Map<BotCommands, BotCommandStrategy> strategyMapCommand;
     private Map<BotInline, BotInlineStrategy> strategyMapInline;
 
@@ -92,7 +93,7 @@ public class MainServiceImpl implements MainService {
             sendMessageUtil.sendAnswerDefault(error, chatId);
             return true;
         } else if (!BASIC_STATE.equals(applicationUser.getUserState())) {
-            String error = "Отмените последнюю команду с помощью /cancel для отправки файлов";
+            String error = "Отмените последнюю команду с помощью " + CANCEL + " для отправки файлов";
             sendMessageUtil.sendAnswerDefault(error, chatId);
             return true;
         }
@@ -130,7 +131,7 @@ public class MainServiceImpl implements MainService {
             BotInlineStrategy botInlineStrategy = strategyMapInline.get(serviceCommand);
             botInlineStrategy.sendAnswer(chatId);
         } else {
-            sendMessageUtil.sendAnswerDefault("Неизвестная команда! Чтобы посмотреть список доступных команд введите /help", chatId);
+            sendMessageUtil.sendAnswerDefault("Неизвестная команда! Чтобы посмотреть список доступных команд введите " + HELP, chatId);
         }
     }
 
@@ -153,7 +154,7 @@ public class MainServiceImpl implements MainService {
             sendMessageUtil.sendAnswerDefault(output, update.getMessage().getChatId());
         } else {
             log.error("Ошибка при приеме команды, текущее состояние - {}", userState);
-            output = "Неизвестное состояние введите /cancel";
+            output = "Неизвестное состояние введите " + CANCEL;
             sendMessageUtil.sendAnswerDefault(output, update.getMessage().getChatId());
         }
 
@@ -166,7 +167,7 @@ public class MainServiceImpl implements MainService {
             BotCommandStrategy botCommandStrategy = strategyMapCommand.get(serviceCommand);
             botCommandStrategy.sendAnswer(applicationUser, chatId);
         } else {
-            sendMessageUtil.sendAnswerDefault("Неизвестная команда! Чтобы посмотреть список доступных команд введите /help", chatId);
+            sendMessageUtil.sendAnswerDefault("Неизвестная команда! Чтобы посмотреть список доступных команд введите " + HELP, chatId);
         }
     }
 

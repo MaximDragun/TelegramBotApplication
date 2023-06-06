@@ -3,7 +3,7 @@ package org.example.service.strategyBotCommand.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.model.ApplicationUser;
 import org.example.service.interfaces.ApplicationUserService;
-import org.example.service.enums.BotCommands;
+import org.example.enums.BotCommands;
 import org.example.service.strategyBotCommand.interfaces.BotCommandStrategy;
 import org.example.util.interfaces.SendMessageUtil;
 import org.springframework.stereotype.Service;

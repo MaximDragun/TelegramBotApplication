@@ -3,6 +3,7 @@ package org.example.service;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.example.enums.BotCommands;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
@@ -24,6 +25,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static org.example.enums.BotCommands.*;
 
 @Slf4j
 @Service
@@ -50,13 +53,13 @@ public class TelegramBot extends TelegramWebhookBot {
 
     private void createBotMenu() throws TelegramApiException {
         List<BotCommand> menuBotCommands = new ArrayList<>();
-        menuBotCommands.add(new BotCommand("/what_to_see", "Случайный фильм или сериал"));
-        menuBotCommands.add(new BotCommand("/cat", "Получить фото котика"));
-        menuBotCommands.add(new BotCommand("/registration", "Регистрация пользователя"));
-        menuBotCommands.add(new BotCommand("/resend_email", "Отправить письмо еще раз"));
-        menuBotCommands.add(new BotCommand("/change_email", "Поменять указанную почту"));
-        menuBotCommands.add(new BotCommand("/help", "Список всех команд"));
-        menuBotCommands.add(new BotCommand("/cancel", "Отмена команды"));
+        menuBotCommands.add(new BotCommand(WHAT_TO_SEE.toString(), "Случайный фильм или сериал"));
+        menuBotCommands.add(new BotCommand(CAT_PICTURE.toString(), "Фото и гифки котиков"));
+        menuBotCommands.add(new BotCommand(REGISTRATION.toString(), "Регистрация пользователя"));
+        menuBotCommands.add(new BotCommand(RESEND.toString(), "Отправить письмо еще раз"));
+        menuBotCommands.add(new BotCommand(CHOOSE_ANOTHER_EMAIL.toString(), "Поменять указанную почту"));
+        menuBotCommands.add(new BotCommand(HELP.toString(), "Список всех команд"));
+        menuBotCommands.add(new BotCommand(CANCEL.toString(), "Отмена команды"));
         execute(new SetMyCommands(menuBotCommands, new BotCommandScopeDefault(), null));
     }
 

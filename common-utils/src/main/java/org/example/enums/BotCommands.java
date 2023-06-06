@@ -1,4 +1,4 @@
-package org.example.service.enums;
+package org.example.enums;
 
 public enum BotCommands {
     HELP("/help"),

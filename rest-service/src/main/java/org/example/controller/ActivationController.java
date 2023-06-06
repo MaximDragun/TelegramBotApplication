@@ -14,13 +14,13 @@ public class ActivationController {
     private final UserActivationService userActivationService;
 
     @GetMapping("/activation")
-    public String activation(@RequestParam("id") String id) {
-        return switch (userActivationService.activation(id)) {
+    public String activation(@RequestParam("id") String id, @RequestParam("mail") String encodeMail) {
+        return switch (userActivationService.activation(id, encodeMail)) {
             case REGISTRATION_ERROR -> "resultRegistration/error";
             case REGISTRATION_SUCCESSFUL -> "resultRegistration/register";
-            case RE_REGISTRATION -> "resultRegistration/reregister";
+            case RE_REGISTRATION -> "resultRegistration/pressing_again";
+            case CHOOSE_EMAIL_SUCCESSFUL -> "resultRegistration/new";
+            case MAIL_INVALID -> "resultRegistration/invalid";
         };
-
     }
-
 }

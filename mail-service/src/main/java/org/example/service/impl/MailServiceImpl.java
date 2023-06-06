@@ -2,6 +2,8 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.EncryptionString;
+import org.example.EncryptionTool;
 import org.example.dto.MailDTO;
 import org.example.service.interfaces.MailService;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +27,7 @@ import java.util.Map;
 public class MailServiceImpl implements MailService {
     private final SpringTemplateEngine springTemplateEngine;
     private final JavaMailSender javaMailSender;
+    private final EncryptionString encryptionString;
     @Value("${spring.mail.username}")
     private String emailFrom;
     @Value("${service.activation.uri}")
@@ -38,8 +41,10 @@ public class MailServiceImpl implements MailService {
     public void send(MailDTO mail) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
-            Map<String,Object> mapContext = new HashMap<>();
-            mapContext.put("emailTo", serviceUri.replace("{id}", mail.getId()));
+            Map<String, Object> mapContext = new HashMap<>();
+            String encodeEmail = encryptionString.decrypt(mail.getEmailTo());
+            String emailForUrl = encryptionString.encryptURL(encodeEmail);
+            mapContext.put("emailTo", serviceUri.replace("{id}", mail.getId()).replace("{mail}", emailForUrl));
             mapContext.put("linkToBot", botUri);
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message,
                     MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
@@ -48,7 +53,7 @@ public class MailServiceImpl implements MailService {
             Context context = new Context();
             context.setVariables(mapContext);
             String emailContent = springTemplateEngine.process(emailTemplateLocation, context);
-            mimeMessageHelper.setTo(mail.getEmailTo());
+            mimeMessageHelper.setTo(encodeEmail);
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setFrom(emailFrom);
             mimeMessageHelper.setText(emailContent, true);
@@ -59,8 +64,6 @@ public class MailServiceImpl implements MailService {
         }
         javaMailSender.send(message);
     }
-
-
 
 
 }

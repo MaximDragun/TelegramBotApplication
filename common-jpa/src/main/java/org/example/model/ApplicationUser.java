@@ -30,6 +30,7 @@ public class ApplicationUser {
     private Boolean isActive;
     @Enumerated(EnumType.STRING)
     private UserState userState;
+    private String newEmail;
 
 
 }

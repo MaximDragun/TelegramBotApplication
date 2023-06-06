@@ -2,6 +2,8 @@ package org.example;
 
 import org.hashids.Hashids;
 
+import java.util.Base64;
+
 
 public class EncryptionTool {
     private final Hashids hashids;
@@ -18,4 +20,5 @@ public class EncryptionTool {
     public Long hashOff(String value) {
         return hashids.decode(value)[0];
     }
+
 }
