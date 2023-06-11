@@ -23,8 +23,6 @@
     <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="linux" width="75" height="75"/> </a> 
   <a href="https://www.postgresql.org" target="_blank" rel="noreferrer"> 
     <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="75" height="75"/> </a> 
-  <a href="https://postman.com" target="_blank" rel="noreferrer">
-    <img src="https://www.vectorlogo.zone/logos/getpostman/getpostman-icon.svg" alt="postman" width="75" height="75"/> </a>
   <a href="https://www.rabbitmq.com" target="_blank" rel="noreferrer">
     <img src="https://www.vectorlogo.zone/logos/rabbitmq/rabbitmq-icon.svg" alt="rabbitMQ" width="75" height="75"/> </a>
   </p><br>
@@ -46,6 +44,5 @@
 <a>HTML5 - to create the structure of the sent page after registering or changing the mail and when sending a letter to the mail for registration.</a><br>
 <a>Linux - for configuring and configuring the application on a remote VDS server on Ubuntu 22.</a><br>
 <a>PostgreSQL - selected as the DBMS for the application, all data used by the application is stored in it.</a><br>
-<a>Postman - this program was used to test sent requests to services.</a><br>
 <a>RabbitMQ is a message broker used to send user messages and application-generated responses.</a><br>
   </h3>
