@@ -42,7 +42,7 @@
 <a>Docker and Docker-Compose were used to test and deploy RabbitMQ and PostgreSQL containers locally and on a remote server to run the application.</a><br>
 <a>Git - to apply version control of the application.</a><br>
 <a>HTML5 - to create the structure of the sent page after registering or changing the mail and when sending a letter to the mail for registration.</a><br>
-<a>Linux - for configuring and configuring the application on a remote VDS server on Ubuntu 22.</a><br>
+<a>Linux - for configuring the application on a remote VDS server on Ubuntu 22.</a><br>
 <a>PostgreSQL - selected as the DBMS for the application, all data used by the application is stored in it.</a><br>
 <a>RabbitMQ is a message broker used to send user messages and application-generated responses.</a><br>
   </h3>
