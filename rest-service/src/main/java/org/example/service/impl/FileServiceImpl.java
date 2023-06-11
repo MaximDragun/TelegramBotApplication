@@ -10,8 +10,10 @@ import org.example.model.BinaryContent;
 import org.example.repository.ApplicationDocumentRepository;
 import org.example.repository.ApplicationPhotoRepository;
 import org.example.service.interfaces.FileService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,33 +46,33 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void uploadDoc(ApplicationDocument applicationDocument, HttpServletResponse response) {
-        response.setContentType(MediaType.parseMediaType(applicationDocument.getMimeType()).toString());
-        response.setHeader("Content-disposition", "attachment; filename=" + applicationDocument.getDocName());
-        response.setStatus(HttpServletResponse.SC_OK);
-        BinaryContent binaryContent = applicationDocument.getBinaryContent();
-        try (ServletOutputStream out = response.getOutputStream()) {
-            out.write(binaryContent.getFileAsArrayOfBytes());
-        } catch (IOException e) {
-            log.error("Не удалось загрузить документ с Id: {}", applicationDocument.getId(), e);
+    public ResponseEntity<?> uploadDoc(ApplicationDocument applicationDocument) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(applicationDocument.getMimeType()));
+            headers.setContentDispositionFormData("attachment", applicationDocument.getDocName());
+            BinaryContent binaryContentNew = applicationDocument.getBinaryContent();
+            return new ResponseEntity<>(binaryContentNew.getFileAsArrayOfBytes(), headers, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Ошибка при загрузке документа c id {}", applicationDocument.getId(), e);
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Не удалось загрузить документ", e);
         }
     }
 
     @Override
-    public void uploadPhoto(ApplicationPhoto applicationPhoto, HttpServletResponse response) {
+    public ResponseEntity<?> uploadPhoto(ApplicationPhoto applicationPhoto) {
         String randomPhotoName = RandomStringUtils.randomAlphanumeric(11, 11);
-        response.setContentType(MediaType.IMAGE_JPEG.toString());
-        response.setHeader("Content-disposition", "attachment; filename=" + randomPhotoName + ".jpg");
-        response.setStatus(HttpServletResponse.SC_OK);
-        BinaryContent binaryContent = applicationPhoto.getBinaryContent();
-        try (ServletOutputStream out = response.getOutputStream()) {
-            out.write(binaryContent.getFileAsArrayOfBytes());
-        } catch (IOException e) {
-            log.error("Не удалось загрузить фото с Id: {}", applicationPhoto.getId(), e);
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            headers.setContentDispositionFormData("attachment", randomPhotoName + ".jpg");
+            BinaryContent binaryContentNew = applicationPhoto.getBinaryContent();
+            return new ResponseEntity<>(binaryContentNew.getFileAsArrayOfBytes(), headers, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Ошибка при загрузке документа c id {}", applicationPhoto.getId(), e);
             throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Не удалось загрузить фото", e);
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Не удалось загрузить документ", e);
         }
     }
 }

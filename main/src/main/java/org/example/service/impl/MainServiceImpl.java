@@ -76,7 +76,7 @@ public class MainServiceImpl implements MainService {
         try {
             ApplicationDocument doc = fileService.processDoc(update.getMessage());
             String link = fileService.genericLink(doc.getId(), LinkType.GET_DOC);
-            String answer = "Документ успешно загружен! ✅ \n"
+            String answer = "Документ успешно загружен ✅ \n"
                     + "Ссылка для скачивания: " + link;
             sendMessageUtil.sendAnswerForFormatLink(answer, chatId);
         } catch (UploadFileException ex) {
@@ -111,7 +111,7 @@ public class MainServiceImpl implements MainService {
         try {
             ApplicationPhoto photo = fileService.processPhoto(update.getMessage());
             String link = fileService.genericLink(photo.getId(), LinkType.GET_PHOTO);
-            String answer = "Фото успешно загружено! ✅ \n"
+            String answer = "Фото успешно загружено ✅ \n"
                     + "Ссылка для скачивания: " + link;
             sendMessageUtil.sendAnswerForFormatLink(answer, chatId);
         } catch (UploadFileException ex) {

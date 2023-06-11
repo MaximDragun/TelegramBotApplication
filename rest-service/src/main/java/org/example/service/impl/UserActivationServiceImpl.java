@@ -29,33 +29,38 @@ public class UserActivationServiceImpl implements UserActivationService {
     @Transactional
     @Override
     public MailResultEnum activation(String hashUserId, String encodeMail) {
-        Long userId = encryptionTool.hashOff(hashUserId);
-        String email = encryptionString.decryptURL(encodeMail);
-        Optional<ApplicationUser> optionalUserId = applicationUserRepository.findById(userId);
-        if (optionalUserId.isPresent()) {
-            ApplicationUser applicationUser = optionalUserId.get();
-            String newEmailUser = applicationUser.getNewEmail();
-            String userEmail = applicationUser.getEmail();
-            if (email.equals(newEmailUser) || newEmailUser == null && email.equals(userEmail)) {
-                if (newEmailUser != null) {
-                    if (userEmail == null) {
-                        applicationUser.setIsActive(true);
+        try {
+            Long userId = encryptionTool.hashOff(hashUserId);
+            String email = encryptionString.decryptURL(encodeMail);
+            Optional<ApplicationUser> optionalUserId = applicationUserRepository.findById(userId);
+            if (optionalUserId.isPresent()) {
+                ApplicationUser applicationUser = optionalUserId.get();
+                String newEmailUser = applicationUser.getNewEmail();
+                String userEmail = applicationUser.getEmail();
+                if (email.equals(newEmailUser) || newEmailUser == null && email.equals(userEmail)) {
+                    if (newEmailUser != null) {
+                        if (userEmail == null) {
+                            applicationUser.setIsActive(true);
+                            applicationUser.setEmail(newEmailUser);
+                            applicationUser.setNewEmail(null);
+                            sendMessageRegistration(applicationUser);
+                            return REGISTRATION_SUCCESSFUL;
+                        }
                         applicationUser.setEmail(newEmailUser);
                         applicationUser.setNewEmail(null);
-                        sendMessageRegistration(applicationUser);
-                        return REGISTRATION_SUCCESSFUL;
+                        return CHOOSE_EMAIL_SUCCESSFUL;
+                    } else {
+                        return RE_REGISTRATION;
                     }
-                    applicationUser.setEmail(newEmailUser);
-                    applicationUser.setNewEmail(null);
-                    return CHOOSE_EMAIL_SUCCESSFUL;
                 } else {
-                    return RE_REGISTRATION;
+                    return MAIL_INVALID;
                 }
             } else {
-                return MAIL_INVALID;
+                log.error("Не найден пользователь с Id {}", userId);
+                return REGISTRATION_ERROR;
             }
-        } else {
-            log.error("Не найден пользователь с Id {}", userId);
+        } catch (Exception e) {
+            log.error("Возникла ошибка при расшифровке почты или id пользователя",e);
             return REGISTRATION_ERROR;
         }
     }

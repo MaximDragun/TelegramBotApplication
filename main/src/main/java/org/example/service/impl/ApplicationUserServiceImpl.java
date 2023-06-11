@@ -17,6 +17,8 @@ import org.springframework.web.client.RestTemplate;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.example.enums.BotCommands.*;
 import static org.example.model.enums.UserState.BASIC_STATE;
@@ -58,6 +60,11 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
         } catch (AddressException e) {
             return "Введите корректный email! Для отмены команды введите " + CANCEL;
         }
+        Pattern pattern = Pattern.compile(".+@gmail.*");
+        Matcher matcher = pattern.matcher(email);
+        if (matcher.find()){
+            return "В данный момент почта Gmail не поддерживается! Выберите другую почту";
+        }
         Optional<ApplicationUser> byEmail = applicationUserRepository.findByEmail(email);
         if (byEmail.isEmpty()) {
             applicationUser.setNewEmail(email);
@@ -85,7 +92,8 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
             return "Повторная отправка не требуется";
         else {
             String hashId = encryptionTool.hashOn(applicationUser.getId());
-            ResponseEntity<String> response = sendRequestToMailService(hashId, applicationUser.getNewEmail());
+            String emailHex = encryptionString.encrypt(applicationUser.getNewEmail());
+            ResponseEntity<String> response = sendRequestToMailService(hashId, emailHex);
             if (response.getStatusCode() != HttpStatus.OK) {
                 String msg = String.format("Отправка эл. письма на почту %s не удалась", applicationUser.getNewEmail());
                 log.error(msg);

@@ -1,52 +1,38 @@
 services:
   postgres:
-    container_name: postgres
-    image: postgres
+    container_name:
+    image:
     environment:
+      POSTGRES_DB:
       POSTGRES_USER:
       POSTGRES_PASSWORD:
       PGDATA:
     volumes:
-      - postgres:/data/postgres
+      -
     ports:
-      - "5434:5432"
+      -
     networks:
-      - postgres
-    restart: unless-stopped
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL:
-      PGADMIN_DEFAULT_PASSWORD:
-      PGADMIN_CONFIG_SERVER_MODE:
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    ports:
-      - "5051:80"
-    networks:
-      - postgres
-    restart: unless-stopped
+      -
+    restart:
 
   rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:3.11.0-management
+    container_name:
+    image:
     volumes:
-      - rabbitmq:/var/lib/docker/volumes/rabbitmq_data/_data
+      -
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      -
+      -
     networks:
-      - postgres
-    restart: unless-stopped
+      -
+    restart:
 
 
 networks:
   postgres:
-    driver: bridge
+    driver:
 
 
 volumes:
   postgres:
-  pgadmin:
   rabbitmq:

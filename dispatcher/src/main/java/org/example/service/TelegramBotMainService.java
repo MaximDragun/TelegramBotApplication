@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.service.interfaces.UpdateProducer;
 import org.example.utils.MessageUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -18,10 +20,11 @@ import static org.example.model.RabbitQueue.*;
 @RequiredArgsConstructor
 @Service
 public class TelegramBotMainService {
-    private final TelegramBot telegramBot;
     private final MessageUtils messageUtils;
     private final UpdateProducer updateProducer;
-
+    @Autowired
+    @Lazy
+    private  TelegramBot telegramBot;
     public void processUpdate(Update update) {
         if (update == null) {
             log.error("Update is null");

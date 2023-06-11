@@ -4,9 +4,14 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.example.enums.BotCommands;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
@@ -19,6 +24,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.generics.BotSession;
 
 import javax.annotation.PostConstruct;
 import java.net.URL;
@@ -30,21 +36,20 @@ import static org.example.enums.BotCommands.*;
 
 @Slf4j
 @Service
-public class TelegramBot extends TelegramWebhookBot {
+public class TelegramBot extends TelegramLongPollingBot {
     @Value("${bot.name}")
     private String userName;
     @Value("${bot.token}")
     private String token;
-    @Value("${bot.uri}")
-    private String uri;
+    @Autowired
+    private TelegramBotMainService telegramBotMainService;
+
+
+
 
     @PostConstruct
     public void init() {
         try {
-            SetWebhook buildWebhook = SetWebhook.builder()
-                    .url(uri)
-                    .build();
-            setWebhook(buildWebhook);
             createBotMenu();
         } catch (TelegramApiException e) {
             log.error("Ошибка при инициализации бота", e);
@@ -63,10 +68,7 @@ public class TelegramBot extends TelegramWebhookBot {
         execute(new SetMyCommands(menuBotCommands, new BotCommandScopeDefault(), null));
     }
 
-    @Override
-    public String getBotPath() {
-        return "/search";
-    }
+
 
     public void sendAnswerMessage(SendMessage sendMessage) {
         if (sendMessage != null) {
@@ -106,9 +108,12 @@ public class TelegramBot extends TelegramWebhookBot {
         return token;
     }
 
+
+
+
     @Override
-    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        return null;
+    public void onUpdateReceived(Update update) {
+        telegramBotMainService.processUpdate(update);
     }
 
 
