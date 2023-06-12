@@ -7,6 +7,8 @@ import org.example.service.strategyBotInline.interfaces.BotInlineStrategy;
 import org.example.util.interfaces.SendMessageUtil;
 import org.springframework.stereotype.Service;
 
+import static org.example.service.enums.BotInline.*;
+
 @RequiredArgsConstructor
 @Service
 public class BotInlineStrategySeries implements BotInlineStrategy {
@@ -19,6 +21,6 @@ public class BotInlineStrategySeries implements BotInlineStrategy {
 
     @Override
     public BotInline myCommands() {
-        return BotInline.SERIAL;
+        return SERIAL;
     }
 }

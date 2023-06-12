@@ -60,6 +60,7 @@ public class MainServiceImpl implements MainService {
                 identity(),
                 (key1, key2) -> key1,
                 () -> new EnumMap<>(BotCommands.class)));
+
         this.strategyMapInline = botInlineStrategies.stream().collect(toMap(BotInlineStrategy::myCommands,
                 identity(),
                 (key1, key2) -> key1,
@@ -85,26 +86,12 @@ public class MainServiceImpl implements MainService {
             String error = "К сожалению, загрузка файла не удалась. ❌\n" +
                     "Повторите попытку позже.";
             sendMessageUtil.sendAnswerDefault(error, chatId);
-        }
-        catch (ExceededMaxSize ex) {
+        } catch (ExceededMaxSize ex) {
             log.error("Документ больше 10мб");
             String error = "Вы отправили документ больше установленных 10 мб❌\n" +
                     "Выберите файл подходящий под ограничение!";
             sendMessageUtil.sendAnswerDefault(error, chatId);
         }
-    }
-
-    private boolean isNotAllowToSendContent(long chatId, ApplicationUser applicationUser) {
-        if (!applicationUser.getIsActive()) {
-            String error = "Зарегистрируйтесь для отправки фото и документов! \ud83d\udee1";
-            sendMessageUtil.sendAnswerDefault(error, chatId);
-            return true;
-        } else if (!BASIC_STATE.equals(applicationUser.getUserState())) {
-            String error = "Отмените последнюю команду с помощью " + CANCEL + " для отправки файлов";
-            sendMessageUtil.sendAnswerDefault(error, chatId);
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -127,6 +114,19 @@ public class MainServiceImpl implements MainService {
                     "Повторите попытку позже.";
             sendMessageUtil.sendAnswerDefault(error, chatId);
         }
+    }
+
+    private boolean isNotAllowToSendContent(long chatId, ApplicationUser applicationUser) {
+        if (!applicationUser.getIsActive()) {
+            String error = "Зарегистрируйтесь для отправки фото и документов! \ud83d\udee1";
+            sendMessageUtil.sendAnswerDefault(error, chatId);
+            return true;
+        } else if (!BASIC_STATE.equals(applicationUser.getUserState())) {
+            String error = "Отмените последнюю команду с помощью " + CANCEL + " для отправки файлов";
+            sendMessageUtil.sendAnswerDefault(error, chatId);
+            return true;
+        }
+        return false;
     }
 
     @Override

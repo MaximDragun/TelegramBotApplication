@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 public class RestConfiguration {
     @Value("${salt}")
     private String salt;
-
     @Bean
     public EncryptionTool getEncryptTool() {
         return new EncryptionTool(salt);

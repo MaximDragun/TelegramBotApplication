@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class CatPictureServiceImpl implements CatPictureService {
     private final RestTemplate restTemplate;
-
     @Value("${url.catapi.restservice}")
     private String restCatUrl;
     @Value("${url.catapi.restservice.gif}")

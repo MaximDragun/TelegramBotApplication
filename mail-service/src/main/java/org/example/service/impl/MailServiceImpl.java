@@ -45,15 +45,19 @@ public class MailServiceImpl implements MailService {
         try {
             String encodeEmail = encryptionString.decrypt(mailDecode);
             String emailForUrl = encryptionString.encryptURL(encodeEmail);
+
             mapContext.put("emailTo", serviceUri.replace("{id}", idDecode).replace("{mail}", emailForUrl));
             mapContext.put("linkToBot", botUri);
+
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message,
                     MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                     StandardCharsets.UTF_8.name());
+
             String subject = "Активация учетной записи пользователя";
             Context context = new Context();
             context.setVariables(mapContext);
             String emailContent = springTemplateEngine.process(emailTemplateLocation, context);
+
             mimeMessageHelper.setTo(encodeEmail);
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setFrom(emailFrom);

@@ -60,16 +60,19 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
         } catch (AddressException e) {
             return "Введите корректный email! Для отмены команды введите " + CANCEL;
         }
+
         Pattern pattern = Pattern.compile(".+@gmail.*");
         Matcher matcher = pattern.matcher(email);
         if (matcher.find()){
             return "В данный момент почта Gmail не поддерживается! Выберите другую почту";
         }
+
         Optional<ApplicationUser> byEmail = applicationUserRepository.findByEmail(email);
         if (byEmail.isEmpty()) {
             applicationUser.setNewEmail(email);
             applicationUser.setUserState(BASIC_STATE);
             ApplicationUser user = applicationUserRepository.save(applicationUser);
+
             String hashId = encryptionTool.hashOn(user.getId());
             String emailHex = encryptionString.encrypt(email);
             ResponseEntity<String> response = sendRequestToMailService(hashId, emailHex);
@@ -122,6 +125,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
                 .id(hashId)
                 .emailTo(email)
                 .build();
+
         HttpEntity<MailDTO> mailDTOHttpEntity = new HttpEntity<>(mailParam, headers);
         return restTemplate.exchange(mailServiceUri,
                 HttpMethod.POST,

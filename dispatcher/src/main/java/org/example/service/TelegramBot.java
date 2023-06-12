@@ -30,9 +30,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Autowired
     private TelegramBotMainService telegramBotMainService;
 
-
-
-
     @PostConstruct
     public void init() {
         try {
@@ -44,7 +41,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void createBotMenu() throws TelegramApiException {
         List<BotCommand> menuBotCommands = new ArrayList<>();
-        menuBotCommands.add(new BotCommand(WHAT_TO_SEE.toString(), "Случайный фильм или сериал"));
+        menuBotCommands.add(new BotCommand(WHAT_TO_WATCH.toString(), "Случайный фильм или сериал"));
         menuBotCommands.add(new BotCommand(CAT_PICTURE.toString(), "Фото и гифки котиков"));
         menuBotCommands.add(new BotCommand(REGISTRATION.toString(), "Регистрация пользователя"));
         menuBotCommands.add(new BotCommand(RESEND.toString(), "Отправить письмо еще раз"));
@@ -53,8 +50,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         menuBotCommands.add(new BotCommand(CANCEL.toString(), "Отмена команды"));
         execute(new SetMyCommands(menuBotCommands, new BotCommandScopeDefault(), null));
     }
-
-
 
     public void sendAnswerMessage(SendMessage sendMessage) {
         if (sendMessage != null) {
@@ -65,6 +60,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
     }
+
     public void sendAnswerPhoto(SendPhoto sendPhoto) {
         if (sendPhoto != null) {
             try {
@@ -74,6 +70,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
     }
+
     public void sendAnswerAnimation(SendAnimation sendAnimation) {
         if (sendAnimation != null) {
             try {
@@ -93,9 +90,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     public String getBotToken() {
         return token;
     }
-
-
-
 
     @Override
     public void onUpdateReceived(Update update) {

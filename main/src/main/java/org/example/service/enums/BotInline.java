@@ -6,8 +6,6 @@ public enum BotInline {
     CAT_PICTURE("Пикча \uD83D\uDC31"),
     CAT_GIF("Гифка \uD83D\uDE40");
 
-
-
     private final String value;
 
     BotInline(String value) {

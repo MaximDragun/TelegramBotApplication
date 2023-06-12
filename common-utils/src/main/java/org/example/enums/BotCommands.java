@@ -7,7 +7,7 @@ public enum BotCommands {
     START("/start"),
     RESEND("/resend_email"),
     CHOOSE_ANOTHER_EMAIL("/change_email"),
-    WHAT_TO_SEE("/what_to_watch"),
+    WHAT_TO_WATCH("/what_to_watch"),
     CAT_PICTURE("/cat");
 
     private final String value;

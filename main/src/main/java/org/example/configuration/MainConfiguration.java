@@ -37,16 +37,20 @@ public class MainConfiguration {
         InlineKeyboardMarkup inline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> listsInlineButtons = new ArrayList<>();
         List<InlineKeyboardButton> listInlineButtons = new ArrayList<>();
+
         InlineKeyboardButton button1 = InlineKeyboardButton.builder()
                 .text("Полнометражка \uD83C\uDFAC")
                 .callbackData(BotInline.FILM.toString())
                 .build();
+
         InlineKeyboardButton button2 = InlineKeyboardButton.builder()
                 .text("Сериал \uD83C\uDF7F")
                 .callbackData(BotInline.SERIAL.toString())
                 .build();
+
         listInlineButtons.add(button1);
         listInlineButtons.add(button2);
+
         listsInlineButtons.add(listInlineButtons);
         inline.setKeyboard(listsInlineButtons);
         return inline;
@@ -57,16 +61,20 @@ public class MainConfiguration {
         InlineKeyboardMarkup inline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> listsInlineButtons = new ArrayList<>();
         List<InlineKeyboardButton> listInlineButtons = new ArrayList<>();
+
         InlineKeyboardButton button1 = InlineKeyboardButton.builder()
                 .text("Пикча \uD83D\uDC31")
                 .callbackData(BotInline.CAT_PICTURE.toString())
                 .build();
+
         InlineKeyboardButton button2 = InlineKeyboardButton.builder()
                 .text("Гифка \uD83D\uDE40")
                 .callbackData(BotInline.CAT_GIF.toString())
                 .build();
+
         listInlineButtons.add(button1);
         listInlineButtons.add(button2);
+
         listsInlineButtons.add(listInlineButtons);
         inline.setKeyboard(listsInlineButtons);
         return inline;

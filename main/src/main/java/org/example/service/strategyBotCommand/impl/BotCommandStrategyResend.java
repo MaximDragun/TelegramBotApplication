@@ -8,6 +8,8 @@ import org.example.service.strategyBotCommand.interfaces.BotCommandStrategy;
 import org.example.util.interfaces.SendMessageUtil;
 import org.springframework.stereotype.Service;
 
+import static org.example.enums.BotCommands.*;
+
 @RequiredArgsConstructor
 @Service
 public class BotCommandStrategyResend implements BotCommandStrategy {
@@ -21,6 +23,6 @@ public class BotCommandStrategyResend implements BotCommandStrategy {
 
     @Override
     public BotCommands myCommands() {
-        return BotCommands.RESEND;
+        return RESEND;
     }
 }

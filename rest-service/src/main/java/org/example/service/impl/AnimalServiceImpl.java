@@ -39,7 +39,7 @@ public class AnimalServiceImpl implements AnimalService {
             } catch (RestClientException e) {
                 i++;
                 if (i > 30) {
-                    log.error("Не удалось получить ответ с car api picture");
+                    log.error("Не удалось получить ответ с cat api picture");
                     throw new ResponseStatusException(
                             HttpStatus.INTERNAL_SERVER_ERROR, "Не удалось обработать ответ сервера");
                 }
@@ -48,10 +48,8 @@ public class AnimalServiceImpl implements AnimalService {
         }
         if (response.getBody() == null || response.getBody().getUrl() == null)
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Ответ от cat api не валидный");
+                    HttpStatus.NOT_FOUND, "Ответ от cat api не валиден");
         return catUrl + response.getBody().getUrl();
-
-
     }
 
     @SneakyThrows
@@ -65,7 +63,7 @@ public class AnimalServiceImpl implements AnimalService {
             } catch (RestClientException e) {
                 i++;
                 if (i > 30) {
-                    log.error("Не удалось получить ответ с car api picture");
+                    log.error("Не удалось получить ответ с cat api gif");
                     throw new ResponseStatusException(
                             HttpStatus.INTERNAL_SERVER_ERROR, "Не удалось обработать ответ сервера");
                 }
@@ -74,7 +72,7 @@ public class AnimalServiceImpl implements AnimalService {
         }
         if (response.getBody() == null || response.getBody().getUrl() == null)
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Ответ от cat api не валидный");
+                    HttpStatus.NOT_FOUND, "Ответ от cat api не валиден");
         return catUrl + response.getBody().getUrl();
     }
 }

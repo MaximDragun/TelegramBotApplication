@@ -62,6 +62,7 @@ public class FileServiceImpl implements FileService {
         Long fileSize = telegramDoc.getFileSize();
         if (((fileSize / 1024.0) / 1024.0) > 10)
             throw new ExceededMaxSize();
+
         String fileId = telegramDoc.getFileId();
         ResponseEntity<String> response = getFilePath(fileId);
         if (response.getStatusCode() == HttpStatus.OK) {
@@ -92,7 +93,6 @@ public class FileServiceImpl implements FileService {
     public String genericLink(Long fileId, LinkType linkType) {
         String hashLink = encryptionTool.hashOn(fileId);
         return "[click me](" + linkAddress + "/" + linkType + "?id=" + hashLink + ")";
-
     }
 
     @Transactional
@@ -110,7 +110,6 @@ public class FileServiceImpl implements FileService {
         return String.valueOf(jsonObject
                 .getJSONObject("result")
                 .getString("file_path"));
-
     }
 
     private ApplicationPhoto buildTransientAppPhoto(PhotoSize telegramPhoto, BinaryContent persistentBinaryContent) {

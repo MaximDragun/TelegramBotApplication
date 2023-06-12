@@ -7,7 +7,7 @@ import org.example.service.strategyBotCommand.interfaces.BotCommandStrategy;
 import org.example.util.interfaces.SendMessageUtil;
 import org.springframework.stereotype.Service;
 
-import static org.example.enums.BotCommands.WHAT_TO_SEE;
+import static org.example.enums.BotCommands.WHAT_TO_WATCH;
 
 @RequiredArgsConstructor
 @Service
@@ -21,7 +21,7 @@ public class BotCommandStrategyWhatToSee implements BotCommandStrategy {
 
     @Override
     public BotCommands myCommands() {
-        return WHAT_TO_SEE;
+        return WHAT_TO_WATCH;
     }
 
     private String getStartFilmText(){

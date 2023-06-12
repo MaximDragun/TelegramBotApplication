@@ -33,7 +33,6 @@ public class FileController {
     @GetMapping("/get-photo")
     public ResponseEntity<?> getPhoto(@RequestParam("id") String id) {
         Optional<ApplicationPhoto> photo = fileService.getPhoto(id);
-        log.error("Я нахожусь в контроллере реста, метод get_photo, Получил фото из бд");
         if (photo.isEmpty()) {
             throw new NotFoundException("Фото не найдено. Попробуйте снова");
         }
