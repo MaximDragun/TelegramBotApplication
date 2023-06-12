@@ -14,7 +14,7 @@ public class BotInlineStrategyFilm implements BotInlineStrategy {
     private final SendMessageUtil sendMessageUtil;
     @Override
     public void sendAnswer(long chatId) {
-        sendMessageUtil.sendAnswerForFilmInlineWithLink(filmService.getLinkForFilm(), chatId);
+        sendMessageUtil.sendAnswerForFilmInline(filmService.getLinkForFilm(), chatId);
     }
 
     @Override

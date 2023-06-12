@@ -1,8 +1,8 @@
 package org.example.service.strategyBotCommand.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.model.ApplicationUser;
 import org.example.enums.BotCommands;
+import org.example.model.ApplicationUser;
 import org.example.service.strategyBotCommand.interfaces.BotCommandStrategy;
 import org.example.util.interfaces.SendMessageUtil;
 import org.springframework.stereotype.Service;
@@ -16,11 +16,15 @@ public class BotCommandStrategyWhatToSee implements BotCommandStrategy {
 
     @Override
     public void sendAnswer(ApplicationUser applicationUser, long chatId) {
-        sendMessageUtil.sendAnswerForFilmInline(chatId);
+        sendMessageUtil.sendAnswerForFilmInline(getStartFilmText(), chatId);
     }
 
     @Override
     public BotCommands myCommands() {
         return WHAT_TO_SEE;
+    }
+
+    private String getStartFilmText(){
+        return "Полнометражка или Сериал? \uD83D\uDD0E";
     }
 }

@@ -39,11 +39,13 @@ public class MailServiceImpl implements MailService {
     @Override
     public void send(MailDTO mail) {
         MimeMessage message = javaMailSender.createMimeMessage();
+        Map<String, Object> mapContext = new HashMap<>();
+        String mailDecode = mail.getEmailTo();
+        String idDecode = mail.getId();
         try {
-            Map<String, Object> mapContext = new HashMap<>();
-            String encodeEmail = encryptionString.decrypt(mail.getEmailTo());
+            String encodeEmail = encryptionString.decrypt(mailDecode);
             String emailForUrl = encryptionString.encryptURL(encodeEmail);
-            mapContext.put("emailTo", serviceUri.replace("{id}", mail.getId()).replace("{mail}", emailForUrl));
+            mapContext.put("emailTo", serviceUri.replace("{id}", idDecode).replace("{mail}", emailForUrl));
             mapContext.put("linkToBot", botUri);
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message,
                     MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
@@ -57,7 +59,7 @@ public class MailServiceImpl implements MailService {
             mimeMessageHelper.setFrom(emailFrom);
             mimeMessageHelper.setText(emailContent, true);
         } catch (MessagingException e) {
-            log.error("Не удалось отправить сообщение пользователю с Id: {} на Email: {}", mail.getId(), mail.getEmailTo(), e);
+            log.error("Не удалось отправить сообщение пользователю с Id: {} на Email: {}", idDecode, mailDecode, e);
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Не удалось отправить сообщение на указанную почту", e);
         }

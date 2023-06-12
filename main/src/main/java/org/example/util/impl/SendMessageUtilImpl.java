@@ -16,50 +16,30 @@ public class SendMessageUtilImpl implements SendMessageUtil {
 
     @Override
     public void sendAnswerDefault(String output, long chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText(output);
-        sendMessage.setDisableNotification(true);
+        SendMessage sendMessage = getFormedMessage(output, chatId);
         producerService.produceAnswerMessage(sendMessage);
     }
 
     @Override
     public void sendAnswerForFormatLink(String output, long chatId) {
-        SendMessage sendMessage = new SendMessage();
+        SendMessage sendMessage = getFormedMessage(output, chatId);
         sendMessage.setParseMode(ParseMode.MARKDOWN);
-        sendMessage.setChatId(chatId);
-        sendMessage.setText(output);
-        sendMessage.setDisableNotification(true);
         producerService.produceAnswerMessage(sendMessage);
     }
 
     @Override
-    public void sendStartKeyBoard(String output, long chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText(output);
-        sendMessage.setDisableNotification(true);
-        producerService.produceAnswerMessage(sendMessage);
-    }
-
-    @Override
-    public void sendAnswerForFilmInline(long chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText("Полнометражка или Сериал? \uD83D\uDD0E");
+    public void sendAnswerForFilmInline(String output, long chatId) {
+        SendMessage sendMessage = getFormedMessage(output, chatId);
         sendMessage.setReplyMarkup(inlineKeyboardMarkupForFilm);
-        sendMessage.setDisableNotification(true);
         producerService.produceAnswerMessage(sendMessage);
     }
-
-    @Override
-    public void sendAnswerForFilmInlineWithLink(String output, long chatId) {
+    
+    private SendMessage getFormedMessage(String output, long chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText(output);
-        sendMessage.setReplyMarkup(inlineKeyboardMarkupForFilm);
         sendMessage.setDisableNotification(true);
-        producerService.produceAnswerMessage(sendMessage);
+        return sendMessage;
     }
 
 }

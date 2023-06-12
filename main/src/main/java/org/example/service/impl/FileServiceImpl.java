@@ -3,6 +3,7 @@ package org.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.EncryptionTool;
+import org.example.exceptions.ExceededMaxSize;
 import org.example.exceptions.UploadFileException;
 import org.example.model.ApplicationDocument;
 import org.example.model.ApplicationPhoto;
@@ -24,8 +25,11 @@ import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 
@@ -55,6 +59,9 @@ public class FileServiceImpl implements FileService {
     @Override
     public ApplicationDocument processDoc(Message telegramMessage) {
         Document telegramDoc = telegramMessage.getDocument();
+        Long fileSize = telegramDoc.getFileSize();
+        if (((fileSize / 1024.0) / 1024.0) > 10)
+            throw new ExceededMaxSize();
         String fileId = telegramDoc.getFileId();
         ResponseEntity<String> response = getFilePath(fileId);
         if (response.getStatusCode() == HttpStatus.OK) {
@@ -84,7 +91,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public String genericLink(Long fileId, LinkType linkType) {
         String hashLink = encryptionTool.hashOn(fileId);
-        return "[click me](http://" + linkAddress + "/" + linkType + "?id=" + hashLink + ")";
+        return "[click me](" + linkAddress + "/" + linkType + "?id=" + hashLink + ")";
 
     }
 
@@ -139,18 +146,41 @@ public class FileServiceImpl implements FileService {
     private byte[] downloadFile(String filePath) {
         String fullUri = fileStorageUri.replace("{token}", token)
                 .replace("{filePath}", filePath);
-        URL urlObj;
+        HttpURLConnection connection;
         try {
-            urlObj = new URL(fullUri);
+            URL url = new URL(fullUri);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
         } catch (IOException e) {
-            log.error("Получить uri {} для загрузки файла из телеграма не удалось", fullUri, e);
+            log.error("Ошибка во время подключения к URL {}", fullUri, e);
             throw new UploadFileException(e);
         }
-        try (InputStream is = urlObj.openStream()) {
-            return is.readAllBytes();
+
+        try {
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                try (InputStream inputStream = new BufferedInputStream(connection.getInputStream());
+                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                    return outputStream.toByteArray();
+                }
+
+            } else {
+                log.error("Загрузить файл из базы телеграма по uri {} не удалось", fullUri);
+                throw new UploadFileException();
+            }
+
         } catch (IOException e) {
             log.error("Загрузить файл из базы телеграма по uri {} не удалось", fullUri, e);
-            throw new UploadFileException(urlObj.toExternalForm(), e);
+            throw new UploadFileException(e);
+        } finally {
+            connection.disconnect();
         }
     }
 }

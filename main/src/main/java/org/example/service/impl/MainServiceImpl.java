@@ -3,6 +3,7 @@ package org.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.enums.BotCommands;
+import org.example.exceptions.ExceededMaxSize;
 import org.example.exceptions.UploadFileException;
 import org.example.model.ApplicationDocument;
 import org.example.model.ApplicationPhoto;
@@ -83,6 +84,12 @@ public class MainServiceImpl implements MainService {
             log.error("Ошибка при загрузке документа из телеграма, ошибка -  {}", ex.getMessage());
             String error = "К сожалению, загрузка файла не удалась. ❌\n" +
                     "Повторите попытку позже.";
+            sendMessageUtil.sendAnswerDefault(error, chatId);
+        }
+        catch (ExceededMaxSize ex) {
+            log.error("Документ больше 10мб");
+            String error = "Вы отправили документ больше установленных 10 мб❌\n" +
+                    "Выберите файл подходящий под ограничение!";
             sendMessageUtil.sendAnswerDefault(error, chatId);
         }
     }
