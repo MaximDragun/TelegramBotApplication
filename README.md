@@ -25,10 +25,14 @@
     <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="75" height="75"/> </a> 
   <a href="https://www.rabbitmq.com" target="_blank" rel="noreferrer">
     <img src="https://www.vectorlogo.zone/logos/rabbitmq/rabbitmq-icon.svg" alt="rabbitMQ" width="75" height="75"/> </a>
+    <a href="https://www.nginx.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nginx/nginx-original.svg" alt="nginx" width="75" height="75"/> </a>
   </p><br>
   
  <h3 align="left"> <a>  You can use the bot as a file hosting service, the currently supported file upload type is photos and documents. Upload them to the bot and he will give you a link to download these files, the link will be available around the clock. To use a file hosting service, you need to register (verify your mail) and then use it without any restrictions. You can also change the mail, or send a message to it again.</a>
-<a>You can also get a random movie or series from imdb, for this the bot uses the imdb api and a photo or gif of a random cat for this the bot uses the cat api.</a><br><br>
+<a>You can also get a random movie or series from imdb, for this the bot uses the imdb api and a photo or gif of a random cat for this the bot uses the cat api.</a>
+<a>The application is deployed on a remote VDS server using Nginx and Docker.</a>
+<br><br>
+
 <a>Microservice architecture is used. There are 4 services in total:</a><br>
 <a>1) Dispatcher service. Receives requests from telegram chat from users by telegram api, sorts them and sends them to the RabbitMQ message broker to the appropriate queue, after executing the main processing logic in the Main service, receives a response from it by listening to a specific queue and sends a response via telegram api to the user.</a><br>
 <a>2) Main service. It contains all the logic of the application. All user messages are processed here and, depending on the content of the message, it generates a response to the user or sends a request to the rest service or mail service, and then, based on the received response, processes it and sends it to the message broker, from where it gets to the Dispatcher.</a><br>
@@ -36,7 +40,7 @@
 <a>4) Mail service. It is used to send letters to the mail when registering a user or changing mail.</a> </h3>
    <h3 align="left">
   <a>Java - the application is written in Java using many frameworks of this language.</a><br>
-<a>Spring is the main framework used to create the microservice architecture of the application, Spring Boot, Spring Data JPA and Spring Rest were also used.</a><br>
+<a>Spring is the main framework used to create the microservice architecture of the application, Spring Boot and Spring Data JPA were also used.</a><br>
 <a>CSS3 - to set the styles of pages sent to the user after registering or changing mail.</a><br>
 <a>Flyway - used for easy migration of the used database.</a><br>
 <a>Docker and Docker-Compose were used to test and deploy RabbitMQ and PostgreSQL containers locally and on a remote server to run the application.</a><br>
@@ -45,4 +49,5 @@
 <a>Linux - for configuring the application on a remote VDS server on Ubuntu 22.</a><br>
 <a>PostgreSQL - selected as the DBMS for the application, all data used by the application is stored in it.</a><br>
 <a>RabbitMQ is a message broker used to send user messages and application-generated responses.</a><br>
+<a>Nginx - to use a reverse proxy, four services run on different ports, nginx connected its own subdomain to each with an ssl certificate for external access.</a><br>
   </h3>
