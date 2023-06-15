@@ -1,6 +1,7 @@
 package org.example.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
@@ -29,6 +30,7 @@ public class TelegramBot extends TelegramWebhookBot {
     @Value("${bot.uri}")
     private String botUri;
 
+    @Autowired
     public TelegramBot(@Value("${bot.token}") String botToken) {
         super(botToken);
     }
