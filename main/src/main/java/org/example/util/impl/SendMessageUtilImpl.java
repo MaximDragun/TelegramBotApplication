@@ -1,7 +1,7 @@
 package org.example.util.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.service.interfaces.ProducerService;
+import org.example.services.interfaces.ProducerService;
 import org.example.util.interfaces.SendMessageUtil;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;

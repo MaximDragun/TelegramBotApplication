@@ -2,7 +2,7 @@ package org.example.util.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.service.interfaces.ProducerService;
+import org.example.services.interfaces.ProducerService;
 import org.example.util.interfaces.SendMessageUtil;
 import org.example.util.interfaces.SendPhotoUtil;
 import org.springframework.stereotype.Component;
