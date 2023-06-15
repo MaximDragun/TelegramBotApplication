@@ -31,14 +31,26 @@ public class FileServiceImpl implements FileService {
     @Transactional(readOnly = true)
     @Override
     public Optional<ApplicationDocument> getDocument(String id) {
-        long l = encryptionTool.hashOff(id);
+        long l;
+        try {
+            l = encryptionTool.hashOff(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Полученный id невалиден");
+        }
         return applicationDocumentRepository.findById(l);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<ApplicationPhoto> getPhoto(String id) {
-        long l = encryptionTool.hashOff(id);
+        long l;
+        try {
+            l = encryptionTool.hashOff(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Полученный id невалиден");
+        }
         return applicationPhotoRepository.findById(l);
     }
 
@@ -47,6 +59,7 @@ public class FileServiceImpl implements FileService {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType(applicationDocument.getMimeType()));
+            headers.setContentDispositionFormData("attachment", applicationDocument.getDocName());
             BinaryContent binaryContentNew = applicationDocument.getBinaryContent();
             return new ResponseEntity<>(binaryContentNew.getFileAsArrayOfBytes(), headers, HttpStatus.OK);
         } catch (Exception e) {

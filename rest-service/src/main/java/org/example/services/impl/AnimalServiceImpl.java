@@ -38,7 +38,7 @@ public class AnimalServiceImpl implements AnimalService {
         ResponseEntity<RandomCatDTO> response = restTemplate.getForEntity(catUrlRequest, RandomCatDTO.class);
         if (response.getBody() == null || response.getBody().getUrl() == null)
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Ответ от cat api не валиден");
+                    HttpStatus.NOT_FOUND, "Ответ от cat api невалиден");
         return catUrl + response.getBody().getUrl();
     }
 }
