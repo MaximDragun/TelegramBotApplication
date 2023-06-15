@@ -1,32 +1,32 @@
-<h1 align="center">TelegramBotApplication</h1>
+<h1 align="center">SmartBot</h1>
 <h3 align="center">Developed telegram bot that can be a file hosting, adviser of movies and cats.
 <a href="https://t.me/my_favorite_smart_bot" target="_blank" rel="noreferrer"> Click to try the bot </a></h3>
-<br> 
+
 
 <h3 align="center">Languages and Tools used in the project:</h3>
 <p align="center">
   <a href="https://www.java.com" target="_blank" rel="noreferrer">
-    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="java" width="75" height="75"/> </a>
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="java" width="100" height="100"/> </a>
    <a href="https://spring.io/" target="_blank" rel="noreferrer"> 
-    <img src="https://www.vectorlogo.zone/logos/springio/springio-icon.svg" alt="spring" width="75" height="75"/> </a>
+    <img src="https://www.vectorlogo.zone/logos/springio/springio-icon.svg" alt="spring" width="100" height="100"/> </a>
   <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> 
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="75" height="75"/>
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="100" height="100"/>
    <a href="https://flywaydb.org/" target="_blank" rel="noreferrer"> 
-  <img src="https://seeklogo.com/images/F/flyway-logo-4BD34A6273-seeklogo.com.png" alt="flyway" width="75" height="75"/> 
+  <img src="https://seeklogo.com/images/F/flyway-logo-4BD34A6273-seeklogo.com.png" alt="flyway" width="100" height="100"/> 
   </a> <a href="https://www.docker.com/" target="_blank" rel="noreferrer">
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg" alt="docker" width="75" height="75"/> </a>
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg" alt="docker" width="100" height="100"/> </a>
   <a href="https://git-scm.com/" target="_blank" rel="noreferrer"> 
-  <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" width="75" height="75"/> </a>
+  <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" width="100" height="100"/> </a> <br>
   <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer">
-    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="75" height="75"/>  </a>
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="100" height="100"/>  </a>
   <a href="https://www.linux.org/" target="_blank" rel="noreferrer"> 
-    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="linux" width="75" height="75"/> </a> 
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="linux" width="100" height="100"/> </a> 
   <a href="https://www.postgresql.org" target="_blank" rel="noreferrer"> 
-    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="75" height="75"/> </a> 
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="100" height="100"/> </a> 
   <a href="https://www.rabbitmq.com" target="_blank" rel="noreferrer">
-    <img src="https://www.vectorlogo.zone/logos/rabbitmq/rabbitmq-icon.svg" alt="rabbitMQ" width="75" height="75"/> </a>
-    <a href="https://www.nginx.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nginx/nginx-original.svg" alt="nginx" width="75" height="75"/> </a>
-  </p><br>
+    <img src="https://www.vectorlogo.zone/logos/rabbitmq/rabbitmq-icon.svg" alt="rabbitMQ" width="100" height="100"/> </a>
+    <a href="https://www.nginx.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nginx/nginx-original.svg" alt="nginx" width="100" height="100"/> </a>
+  </p>
   
  <h3 align="left"> <a>  You can use the bot as a file hosting service, the currently supported file upload type is photos and documents. Upload them to the bot and he will give you a link to download these files, the link will be available around the clock. To use a file hosting service, you need to register (verify your mail) and then use it without any restrictions. You can also change the mail, or send a message to it again.</a>
 <a>You can also get a random movie or series from imdb, for this the bot uses the imdb api and a photo or gif of a random cat for this the bot uses the cat api.</a>
