@@ -34,12 +34,13 @@
 <br><br>
 
 <a>Microservice architecture is used. There are 4 services in total:</a><br>
-<a>1) Dispatcher service. Receives requests from telegram chat from users by telegram api, sorts them and sends them to the RabbitMQ message broker to the appropriate queue, after executing the main processing logic in the Main service, receives a response from it by listening to a specific queue and sends a response via telegram api to the user.</a><br>
-<a>2) Main service. It contains all the logic of the application. All user messages are processed here and, depending on the content of the message, it generates a response to the user or sends a request to the rest service or mail service, and then, based on the received response, processes it and sends it to the message broker, from where it gets to the Dispatcher.</a><br>
-<a>3) Rest service. Based on the request logic, it forms its own request and accesses the database or third-party api services to receive data, after which it sends the response along with the data to the Main service.</a><br>
+<a>1) Dispatcher service. Receives requests from telegram chat from users by telegram api, sorts them and sends them to the RabbitMQ message broker to the appropriate queue, after executing the main processing logic in the Central service, receives a response from it by listening to a specific queue and sends a response via telegram api to the user.</a><br>
+<a>2) Central service. It contains all the logic of the application. All user messages are processed here and, depending on the content of the message, it generates a response to the user or sends a request to the rest service or mail service, and then, based on the received response, processes it and sends it to the message broker, from where it gets to the Dispatcher.</a><br>
+<a>3) Rest service. Based on the request logic, it forms its own request and accesses the database or third-party api services to receive data, after which it sends the response along with the data to the Central service.</a><br>
 <a>4) Mail service. It is used to send letters to the mail when registering a user or changing mail.</a> </h3>
    <h3 align="left">
-  <a>Java - the application is written in Java using many frameworks of this language.</a><br>
+<a>Brief description of applied Languages and Tools:</a><br>
+<a>Java - the application is written in Java using many frameworks of this language.</a><br>
 <a>Spring is the main framework used to create the microservice architecture of the application, Spring Boot and Spring Data JPA were also used.</a><br>
 <a>CSS3 - to set the styles of pages sent to the user after registering or changing mail.</a><br>
 <a>Flyway - used for easy migration of the used database.</a><br>
