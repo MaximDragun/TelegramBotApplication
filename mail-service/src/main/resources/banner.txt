@@ -1,5 +1,9 @@
+${AnsiColor.GREEN}
 ,--.   ,--.        ,--.,--.  ,---.                         ,--.
 |   `.'   | ,--,--.`--'|  | '   .-' ,---. ,--.--.,--.  ,--.`--' ,---. ,---.
 |  |'.'|  |' ,-.  |,--.|  | `.  `-.| .-. :|  .--' \  `'  / ,--.| .--'| .-. :
 |  |   |  |\ '-'  ||  ||  | .-'    \   --.|  |     \    /  |  |\ `--.\   --.
 `--'   `--' `--`--'`--'`--' `-----' `----'`--'      `--'   `--' `---' `----'
+${AnsiStyle.ITALIC}${AnsiColor.CYAN}
+Powered by Spring Boot${spring-boot.formatted-version}
+${AnsiStyle.NORMAL}${AnsiColor.BRIGHT_WHITE}

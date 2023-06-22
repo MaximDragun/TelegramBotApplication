@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>org.example</groupId>
-    <artifactId>main</artifactId>
+    <artifactId>central</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
@@ -96,7 +96,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>org.example.MainApplication</mainClass>
+                    <mainClass>org.example.CentralApplication</mainClass>
                     <layout>JAR</layout>
                 </configuration>
             </plugin>
