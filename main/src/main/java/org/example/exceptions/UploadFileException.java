@@ -6,10 +6,4 @@ public class UploadFileException extends RuntimeException {
         super(message);
     }
 
-    public UploadFileException(Throwable cause) {
-        super(cause);
-    }
-    public UploadFileException() {
-        super();
-    }
 }

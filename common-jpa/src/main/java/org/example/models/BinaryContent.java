@@ -1,6 +1,7 @@
 package org.example.models;
 
 import lombok.*;
+import org.example.models.enums.TypeFile;
 
 import javax.persistence.*;
 
@@ -16,5 +17,8 @@ public class BinaryContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long fileId;
+    @Enumerated(EnumType.STRING)
+    private TypeFile typeFile;
     private byte[] fileAsArrayOfBytes;
 }

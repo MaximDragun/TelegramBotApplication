@@ -17,7 +17,7 @@ public class BotInlineStrategyCatGif implements BotInlineStrategy {
 
     @Override
     public void sendAnswer(long chatId) {
-        sendAnimationUtil.sendAnswerForCatInline(catPictureService.getLinkCatGif(),chatId);
+        sendAnimationUtil.sendAnswerForCatInline(catPictureService.getLinkCatGif(), chatId);
     }
 
     @Override

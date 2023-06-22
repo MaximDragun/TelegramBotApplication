@@ -29,7 +29,7 @@ public class SendPhotoUtilImpl implements SendPhotoUtil {
             sendPhoto.setDisableNotification(true);
             producerService.produceAnswerPhoto(sendPhoto);
         } catch (Exception e) {
-            log.error("Ошибка при отправке фото с URL картинки {}", url, e);
+            log.error("Ошибка при отправке фото с URL {}", url, e);
             sendMessageUtil.sendAnswerDefault(e.getMessage(), chatId);
         }
     }

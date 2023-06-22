@@ -36,9 +36,11 @@ public class AnimalServiceImpl implements AnimalService {
 
     private String getUrlResult(String catUrlRequest) {
         ResponseEntity<RandomCatDTO> response = restTemplate.getForEntity(catUrlRequest, RandomCatDTO.class);
-        if (response.getBody() == null || response.getBody().getUrl() == null)
+        if (response.getBody() == null || response.getBody().getUrl() == null) {
+            log.error("Ответ от cat api при получении ссылки невалиден");
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Ответ от cat api невалиден");
+        }
         return catUrl + response.getBody().getUrl();
     }
 }

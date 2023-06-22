@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class CatPictureServiceImpl implements CatPictureService {
     private final RestTemplate restTemplate;
+
     @Value("${url.catapi.restservice}")
     private String restCatUrl;
     @Value("${url.catapi.restservice.gif}")
@@ -35,7 +36,6 @@ public class CatPictureServiceImpl implements CatPictureService {
                     " статус {} ошибка {}", response.getStatusCode(), response.getBody());
             return "Ошибка запроса, повторите запрос позже";
         }
-
     }
 
     @Override

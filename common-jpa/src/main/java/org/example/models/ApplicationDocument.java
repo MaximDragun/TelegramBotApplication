@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -18,8 +17,6 @@ public class ApplicationDocument {
     private Long id;
     private String telegramFileId;
     private String docName;
-    @OneToOne
-    private BinaryContent binaryContent;
     private String mimeType;
     private Long fileSize;
 }

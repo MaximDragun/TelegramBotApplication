@@ -1,5 +1,6 @@
 package org.example.services.interfaces;
 
-public interface UploadSeriesService {
+public interface UploadContentService {
+    void uploadFilms();
     void uploadSeries();
 }

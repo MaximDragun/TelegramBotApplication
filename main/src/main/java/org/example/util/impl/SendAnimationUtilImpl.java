@@ -28,7 +28,7 @@ public class SendAnimationUtilImpl implements SendAnimationUtil {
             sendAnimation.setDisableNotification(true);
             producerService.produceAnswerAnimation(sendAnimation);
         } catch (Exception e) {
-            log.error("Ошибка при отправке фото с URL картинки {}", url, e);
+            log.error("Ошибка при отправке гифки с URL {}", url, e);
             sendMessageUtil.sendAnswerDefault(e.getMessage(), chatId);
         }
     }

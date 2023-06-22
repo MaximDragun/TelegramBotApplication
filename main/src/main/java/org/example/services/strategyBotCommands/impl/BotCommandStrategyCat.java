@@ -1,9 +1,9 @@
 package org.example.services.strategyBotCommands.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.enums.BotCommands;
 import org.example.models.ApplicationUser;
 import org.example.services.interfaces.CatPictureService;
-import org.example.enums.BotCommands;
 import org.example.services.strategyBotCommands.interfaces.BotCommandStrategy;
 import org.example.util.interfaces.SendPhotoUtil;
 import org.springframework.stereotype.Service;

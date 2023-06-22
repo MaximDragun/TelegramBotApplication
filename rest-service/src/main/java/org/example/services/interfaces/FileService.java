@@ -3,6 +3,7 @@ package org.example.services.interfaces;
 import org.example.models.ApplicationDocument;
 import org.example.models.ApplicationPhoto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.util.Optional;
 
@@ -11,8 +12,8 @@ public interface FileService {
 
     Optional<ApplicationPhoto> getPhoto(String id);
 
-    ResponseEntity<?> uploadDoc(ApplicationDocument applicationDocument);
+    ResponseEntity<StreamingResponseBody> uploadDoc(ApplicationDocument applicationDocument);
 
-    ResponseEntity<?> uploadPhoto(ApplicationPhoto applicationPhoto);
+    ResponseEntity<StreamingResponseBody> uploadPhoto(ApplicationPhoto applicationPhoto);
 
 }

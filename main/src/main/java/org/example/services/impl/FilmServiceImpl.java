@@ -31,7 +31,7 @@ public class FilmServiceImpl implements FilmService {
     @Value("${link.address.series}")
     private String linkRestSeries;
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public String getLinkForFilm() {
         int randomInt = getRandomInt();
@@ -60,7 +60,7 @@ public class FilmServiceImpl implements FilmService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public String getLinkForSeries() {
         int randomInt = getRandomInt();

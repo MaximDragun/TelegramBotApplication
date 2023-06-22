@@ -17,7 +17,5 @@ public class ApplicationPhoto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String telegramFileId;
-    @OneToOne
-    private BinaryContent binaryContent;
     private Integer fileSize;
 }

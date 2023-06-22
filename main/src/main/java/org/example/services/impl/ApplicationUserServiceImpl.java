@@ -30,6 +30,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     private final EncryptionTool encryptionTool;
     private final EncryptionString encryptionString;
     private final RestTemplate restTemplate;
+
     @Value("${service.mail.uri}")
     private String mailServiceUri;
 

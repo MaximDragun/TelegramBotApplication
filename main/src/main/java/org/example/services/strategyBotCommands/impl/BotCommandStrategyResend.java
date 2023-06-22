@@ -1,14 +1,14 @@
 package org.example.services.strategyBotCommands.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.enums.BotCommands;
 import org.example.models.ApplicationUser;
 import org.example.services.interfaces.ApplicationUserService;
-import org.example.enums.BotCommands;
 import org.example.services.strategyBotCommands.interfaces.BotCommandStrategy;
 import org.example.util.interfaces.SendMessageUtil;
 import org.springframework.stereotype.Service;
 
-import static org.example.enums.BotCommands.*;
+import static org.example.enums.BotCommands.RESEND;
 
 @RequiredArgsConstructor
 @Service

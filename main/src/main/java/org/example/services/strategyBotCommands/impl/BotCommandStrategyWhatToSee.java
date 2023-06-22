@@ -24,7 +24,7 @@ public class BotCommandStrategyWhatToSee implements BotCommandStrategy {
         return WHAT_TO_WATCH;
     }
 
-    private String getStartFilmText(){
+    private String getStartFilmText() {
         return "Полнометражка или Сериал? \uD83D\uDD0E";
     }
 }

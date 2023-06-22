@@ -27,6 +27,7 @@ public class MailServiceImpl implements MailService {
     private final SpringTemplateEngine springTemplateEngine;
     private final JavaMailSender javaMailSender;
     private final EncryptionString encryptionString;
+
     @Value("${spring.mail.username}")
     private String emailFrom;
     @Value("${service.activation.uri}")
