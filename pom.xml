@@ -15,9 +15,9 @@
 	<name>SmartBot</name>
 	<description>create bot on Spring Boot</description>
 	<modules>
-		<module>dispatcher</module>
+		<module>dispatcher-service</module>
 		<module>rabbitMQ-utils</module>
-        <module>central</module>
+        <module>central-service</module>
         <module>common-jpa</module>
         <module>rest-service</module>
         <module>common-utils</module>
@@ -41,7 +41,6 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -53,10 +52,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-
 	</dependencies>
-
-
 
 </project>
