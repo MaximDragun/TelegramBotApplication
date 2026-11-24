@@ -9,7 +9,7 @@
     <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="java" width="100" height="100"/> </a>
    <a href="https://spring.io/" target="_blank" rel="noreferrer"> 
     <img src="https://www.vectorlogo.zone/logos/springio/springio-icon.svg" alt="spring" width="100" height="100"/> </a>
-  <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> dfdf
+  <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> gg
   <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="100" height="100"/>
    <a href="https://flywaydb.org/" target="_blank" rel="noreferrer"> 
   <img src="https://seeklogo.com/images/F/flyway-logo-4BD34A6273-seeklogo.com.png" alt="flyway" width="100" height="100"/> 
